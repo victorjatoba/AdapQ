@@ -17,83 +17,73 @@
 
 	<title>Make Your Time - Sua planilha de estudos inteligente</title>
 
+	<!-- Bootstrap Core CSS -->
+	<link href="resources/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet" />
+	
+	<!-- Custom styles for this template -->
+	<link href="resources/css/starter-template.css" rel="stylesheet" />
+	
+	<!-- Custom Fonts -->
+	<link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic"	rel="stylesheet" type="text/css" />
+	
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+
+	<!-- jQuery called by Primefaces -->
+	<h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+
+	<h:outputScript library="primefaces" name="jquery/jquery-plugins.js" target="head" />
+
+	<script src="resources/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+
+	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+	<script src="resources/js/ie10-viewport-bug-workaround.js"></script>
 </h:head>
 
 <body>
 
 	<h:form id="form" enctype="multipart/form-data">
 
-		<a name="contact"></a>
-		<div class="banner">
-			<div class="container">
-				<div class="row">
-
-					<div class="col-lg-4">
-						<h2>Se conecte com a gente:</h2>
-					</div>
-					<div class="col-lg-8">
-						<ul class="list-inline banner-social-buttons">
-							<li><a href="https://twitter.com/mytoficial" target="_blank"
-								class="btn btn-default btn-lg"><i
-									class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a></li>
-							<li><a href="https://www.facebook.com/mytoficial"
-								target="_blank" class="btn btn-default btn-lg"><i
-									class="fa fa-facebook fa-fw"></i> <span class="network-name">Facebook</span></a></li>
-
-							<li><a href="https://instagram.com/makeyourtime/"
-								target="_blank" class="btn btn-default btn-lg"><i
-									class="fa fa-instagram fa-fw"></i> <span class="network-name">Instagram</span></a></li>
-
-							<li><a href="https://plus.google.com/111221607898465361224/"
-								target="_blank" class="btn btn-default btn-lg"><i
-									class="fa fa-google-plus fa-fw"></i> <span class="network-name">Google+</span></a></li>
-						</ul>
-					</div>
-				</div>
-
-			</div>
-			<!-- /.container -->
-
-		</div>
-		<!-- /.banner -->
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+	      <div class="container">
+	        <div class="navbar-header">
+	          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+	            <span class="sr-only">Toggle navigation</span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	          </button>
+	          <a class="navbar-brand" href="#">AdapQuest</a>
+	        </div>
+	        <div id="navbar" class="collapse navbar-collapse">
+	          <ul class="nav navbar-nav">
+	            <li class="active"><a href="#">Home</a></li>
+	            <li><a href="#about">About</a></li>
+	            <li><a href="#contact">Contact</a></li>
+	          </ul>
+	        </div><!--/.nav-collapse -->
+	      </div>
+	    </nav>
+	    
+	    <div class="container">
+	      <div class="starter-template">
+	        <h1>Adap Quest</h1>
+	        <p class="lead">Adapta o seu conhecimento ao seu aprendizado.</p>
+	      </div>
+	    </div><!-- /.container -->
 
 		<!-- Footer -->
 		<footer>
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-10 col-lg-offset-1 text-center">
-					<img class="img-responsive center-block"
-						src="resources/img/myt_marca_nome_transparent.png" width="10%"
-						height="10%" alt="Make Your Time" title="Make Your Time" />
 
-					<p>Salvador, BA - Brasil</p>
-					<ul class="list-unstyled">
-						<li><i class="fa fa-phone fa-fw"></i> +55 (71) 3014-4774</li>
-						<li><i class="fa fa-envelope-o fa-fw"></i> <a
-							href="mailto:contato@intelectin.com.br">contato@intelectin.com.br</a></li>
-					</ul>
-					<br />
-					<ul class="list-inline">
-						<li><a href="https://www.facebook.com/mytoficial"
-							target="_blank"><i class="fa fa-facebook fa-fw fa-3x"></i></a></li>
-
-						<li><a href="https://instagram.com/makeyourtime/"
-							target="_blank"><i class="fa fa-instagram fa-fw fa-3x"></i></a></li>
-
-						<li><a href="https://twitter.com/mytoficial" target="_blank"><i
-								class="fa fa-twitter fa-fw fa-3x"></i></a></li>
-
-						<li><a href="https://plus.google.com/111221607898465361224/"
-							target="_blank"><i class="fa fa-google-plus fa-fw fa-3x"></i></a></li>
-					</ul>
 					<hr class="small" />
-					<p class="text-muted">Copyright &copy; Intelectin Corporation
-						2015</p>
+					<p class="text-muted">Copyright &copy; Victor Jatobá 2017</p>
 				</div>
 			</div>
 		</div>
 		</footer>
 	</h:form>
-
 </body>
 </html>
