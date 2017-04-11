@@ -6,7 +6,7 @@ Adapting questions (items) to the student ability
 Web Application
 
 # How to contact us?
-Send a e-mail to: victor.jatoba(at)usp.br
+Send an e-mail to: victor.jatoba(at)usp.br
 
 # Thanks
 
