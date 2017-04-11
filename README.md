@@ -8,7 +8,8 @@ Web Application
 # How to contact us?
 Send a e-mail to: victor.jatoba(at)usp.br
 
-# Frameworks
+<h2> Thanks </h2>
+
 <dl>
   <dt> Psychometrics </dt>
   <dd>Author: @meyerjp3</dd>
