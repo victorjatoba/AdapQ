@@ -1,0 +1,35 @@
+/**
+ * Description of how to configure the development environment.
+ *
+ * @author Victor Jatoba
+ * @version Tue Apr 11 2017
+ */
+
+# Versions:
+  Open JDK 1.7
+  Eclipse Luna
+  Maven 2.6
+
+# Steps to configure:
+  1. Install JDK 1.7 (http://askubuntu.com/questions/761127/how-do-i-install-openjdk-7-on-ubuntu-16-04-or-higher)
+      sudo add-apt-repository ppa:openjdk-r/ppa
+      sudo apt-get update
+      sudo apt-get install openjdk-7-jdk
+  2. Download and Install Eclipse Luna
+  3. Import project by egit plugin
+
+# Important things
+  - How to add jMetrik jar within eclipse project
+    Build Path:
+      1. Right click on your project > Properties;
+      2. Go to "Java Build Path" > Add External JARs;
+      3. Select jmetrik-x.x.x.jar;
+      4. Click in OK;
+    Deplyment:
+      5. Right click again on your project > Properties;
+      6. Go to "Deplyment Assembly" > Add;
+      7. Select: "Archives from File System" > Add;
+      8. Select jmetrik-x.x.x.jar;
+      9 Click in Finish;
+      10. Apply > Ok;
+    *Now you can run your project without error
