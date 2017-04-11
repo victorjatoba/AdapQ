@@ -10,8 +10,11 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
+import util.FileUploadUtil;
+
 import com.itemanalysis.psychometrics.data.VariableName;
 import com.itemanalysis.psychometrics.distribution.UserSuppliedDistributionApproximation;
+import com.itemanalysis.psychometrics.irt.estimation.IrtExaminee;
 import com.itemanalysis.psychometrics.irt.model.Irm3PL;
 import com.itemanalysis.psychometrics.irt.model.IrmGPCM;
 import com.itemanalysis.psychometrics.irt.model.IrmGPCM2;
@@ -103,7 +106,7 @@ public class IrtExamineeTest {
 		// System.out.println();
 		System.out.println("MLE test: LSAT7.");
 		if (lsat7 == null)
-			readLsat7Data();
+			lsat7 = FileUploadUtil.readTestData("lsat7.txt");
 
 		int n = aParamLSAT7.length;
 		int nPeople = lsat7.length;

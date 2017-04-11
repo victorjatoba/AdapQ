@@ -2,24 +2,14 @@ package util;
 
 import javax.faces.context.FacesContext;
 
-
 public class Constants {
 	public static final String USER_LOGGED = "userLogged";
 
 	public static final String CONTEXT_MB = "contextMB";
-	public static final String AVAILABILITY_MB = "availabilityMB";
-	public static final String RESET_PASSWORD_MB = "resetPasswordMB";
-	public static final String FORGOT_PASSWORD_MB = "forgotPasswordMB";
-	public static final String QUESTION_MB = "questionMB";
-	public static final String EXERCISE_MB = "exerciseMB";
-	public static final String VIDEO_MB = "videoMB";
-	public static final String PERFORMANCE_MB = "performanceMB";
-	public static final String ACESS_ADMINISTRATION_MB = "acessAdministrationMB";
 
 	public static final String PAGE_SUCESS = "sucess";
 	public static final String PAGE_LOGIN = "login";
 	public static final String PAGE_EXERCISE = "exercise";
-	public static final String PAGE_VIDEO = "video";
 	public static final String PAGE_PERFORMANCE = "performance";
 	public static final String PAGE_ADMINISTRATION = "dashboardAdministration";
 
@@ -54,4 +44,10 @@ public class Constants {
 
 	public static final Long PROFILE_STUDENT = 2L;
 	public static final Long PROFILE_ADMINISTRATION = 1L;
+
+	// IRT Params
+	public static double[] aParamLSAT7 = { 0.5760746525, 0.6713629131, 0.9567791258, 0.4266571055, 0.4398755432 };
+	public static double[] bParamLSAT7 = { -1.8877222528, -0.7154624410, -1.0825764537, -0.6760358283, -2.4772429769 };
+	public static double minTheta = -9.0;// in lieu of negative infinity
+	public static double maxTheta = 9.0;// in lieu of positive infinity
 }
