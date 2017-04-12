@@ -18,6 +18,9 @@
  */
 package managedBean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -38,7 +41,8 @@ import enums.Page;
 public class ContextMB {
 
 	private String actualPage = Page.HOME.getName();
-	IrtExaminee ivec;
+	private List<IrtExaminee> iVecs;
+	private List<ItemResponseModel> irms;
 
 	public ContextMB() {
 		this.clearFields();
@@ -53,7 +57,10 @@ public class ContextMB {
 
 		// Set the managed bean in session to get anywhere else.
 		FacesUtil.setManagedBeanInSession(Constants.CONTEXT_MB, this);
-		ivec = new IrtExaminee(new ItemResponseModel[1]);
+
+		// Init dataset
+		byte[][] lsat7 = FileUploadUtil.readTestData("lsat7.txt");
+		iVecs = this.mountExamineeList(lsat7);
 	}
 
 	@PostConstruct
@@ -61,50 +68,65 @@ public class ContextMB {
 	}
 
 	/**
-	 * Log out. Remove the object UserModel of session
 	 * 
-	 * @return go to home page.
-	 * @author anchieta
+	 * @return
 	 */
 	public String generateTest1() {
 
-		ivec = this.maximumLikelihoodTest2PLToContext();
+		this.runMaximumLikelihood2PL();
 
 		// return goToHomePage();
 		return "";
 	}
 
-	public IrtExaminee maximumLikelihoodTest2PLToContext() {
-		byte[][] lsat7 = FileUploadUtil.readTestData("lsat7.txt");
-
+	/**
+	 * 
+	 * @param dataSet
+	 * @return
+	 */
+	private List<IrtExaminee> mountExamineeList(byte[][] dataSet) {
 		int n = Constants.aParamLSAT7.length;
-		int nPeople = lsat7.length;
+		int nPeople = dataSet.length;
 
 		ItemResponseModel[] irmArray = new ItemResponseModel[n];
-		ItemResponseModel irm;
+		irms = new ArrayList<ItemResponseModel>();
 
 		// create item response models objects
 		VariableName iName = null;
 		for (int i = 0; i < n; i++) {
 			String name = "V" + i;
 			iName = new VariableName(name);
-			irmArray[i] = new Irm3PL(Constants.aParamLSAT7[i], Constants.bParamLSAT7[i], 1.702);
-			irmArray[i].setName(iName);
+			Irm3PL irm = new Irm3PL(Constants.aParamLSAT7[i], Constants.bParamLSAT7[i], 1.702);
+			irm.setName(iName);
+
+			irmArray[i] = irm;
+			irms.add(irm);
 		}
 
-		IrtExaminee iVec = new IrtExaminee(irmArray);
+		List<IrtExaminee> iVecs = new ArrayList<IrtExaminee>();
 
-		// estimate ability scores for each response pattern
+		for (int j = 0; j < nPeople; j++) {
+			IrtExaminee iVec = new IrtExaminee(irmArray);
+			iVec.setResponseVector(dataSet[j]);
+			iVecs.add(iVec);
+		}
+
+		return iVecs;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public void runMaximumLikelihood2PL() {
+
 		double mle = 0.0;
 		double se = 0.0;
-		for (int j = 0; j < nPeople; j++) {
-			iVec.setResponseVector(lsat7[j]);
-			mle = iVec.maximumLikelihoodEstimate(Constants.minTheta, Constants.maxTheta);
-			se = iVec.mleStandardErrorAt(mle);
-			// System.out.println("MLE" + j + ": " + mle + " SE: " + se);
-		}
 
-		return iVec;
+		for (IrtExaminee irtExaminee : iVecs) {
+			mle = irtExaminee.maximumLikelihoodEstimate(Constants.minTheta, Constants.maxTheta);
+			se = irtExaminee.mleStandardErrorAt(mle);
+		}
 
 	}
 
@@ -128,12 +150,20 @@ public class ContextMB {
 		this.actualPage = actualPage;
 	}
 
-	public IrtExaminee getIvec() {
-		return ivec;
+	public List<IrtExaminee> getiVecs() {
+		return iVecs;
 	}
 
-	public void setIvec(IrtExaminee ivec) {
-		this.ivec = ivec;
+	public void setiVecs(List<IrtExaminee> iVecs) {
+		this.iVecs = iVecs;
+	}
+
+	public List<ItemResponseModel> getIrms() {
+		return irms;
+	}
+
+	public void setIrms(List<ItemResponseModel> irms) {
+		this.irms = irms;
 	}
 
 }

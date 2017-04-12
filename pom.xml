@@ -125,6 +125,7 @@
 			<version>2.1</version>
 		</dependency>
 		<!-- END COMMONS USED BY PSYCHOMETRICS -->
+
 	</dependencies>
 
 	<!-- PRIMEFACES -->
