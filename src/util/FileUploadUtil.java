@@ -50,12 +50,16 @@ public class FileUploadUtil {
 	 * 
 	 * @param dataName
 	 *            the name of the file.
-	 * @return
+	 * @param lineNumber
+	 *            the number of lines
+	 * @param columnNumber
+	 *            the number of columns
+	 * @return the matrix of data
 	 */
-	public static byte[][] readTestData(String dataName) {
+	public static byte[][] readTestData(String dataName, int lineNumber, int columnNumber) {
 		byte[][] testData = null;
 		try {
-			testData = new byte[32][5];
+			testData = new byte[lineNumber][columnNumber];
 			File f = FileUtils.toFile(TestData.class.getResource(dataName));
 			BufferedReader br = new BufferedReader(new FileReader(f));
 			String line = "";
