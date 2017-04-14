@@ -50,28 +50,11 @@
 
 	<h:form id="form" enctype="multipart/form-data">
 
-		<nav class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed"
-					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-					aria-controls="navbar">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="#">AdapQuest</a>
-			</div>
-			<div id="navbar" class="collapse navbar-collapse">
-				<ul class="nav navbar-nav">
-					<li class="active"><a href="#">Home</a></li>
-					<li><a href="#about">About</a></li>
-					<li><a href="#contact">Contact</a></li>
-				</ul>
-			</div>
-			<!--/.nav-collapse -->
+		<div id="header">
+			<ui:insert name="header">
+				<ui:include src="resources/template/header.xhtml" />
+			</ui:insert>
 		</div>
-		</nav>
 
 		<div class="container">
 			<div class="starter-template">
@@ -89,97 +72,45 @@
 			<div class="container">
 				<div class="row">
 
-					<div class="panel-body" align="center">
-						<h3 style="margin-top: 0">Items</h3>
-
-						<p:outputLabel value="#{Constants.aParamLSAT7[0]}" />
-					</div>
-
-					<!-- Items table -->
-					<p:dataTable id="itemTable" style="border-style:none"
-						value="#{contextMB.irms}" var="irm" rowIndexVar="rowIndex"
-						paginator="false">
-
-						<p:column headerText="#" width="7%">
-							<p:outputLabel value="#{rowIndex +1}" />
-						</p:column>
-
-						<p:column headerText="Name" colspan="1">
-							<p:outputLabel value="#{irm.name}" title="Name" />
-						</p:column>
-
-						<p:column headerText="Number Of Parameters" colspan="1">
-							<p:outputLabel value="#{irm.numberOfParameters}"
-								title="Number Of Parameters" />
-						</p:column>
-
-						<p:column headerText="Difficulty" colspan="1">
-							<p:outputLabel value="#{irm.difficulty}" title="Difficulty" />
-						</p:column>
-
-						<p:column headerText="Discrimination" colspan="1">
-							<p:outputLabel value="#{irm.discrimination}"
-								title="Discrimination" />
-						</p:column>
-
-						<p:column headerText="Guessing" colspan="1">
-							<p:outputLabel value="#{irm.guessing}" title="Guessing" />
-						</p:column>
-
-					</p:dataTable>
-
-					<br /> <br />
-					<div align="left">
+					<div align="center">
 						<div class="btn-group" role="group" aria-label="...">
-							<h:commandButton id="estimateTheta" value="Estimate theta"
-								action="#{contextMB.generateTest1}" update="@form"
+							<h:commandButton id="thetaEstimation"
+								value="Estimate theta known item"
+								action="#{contextMB.thetaEstimationKnownItem}" update="@form"
 								styleClass="btn btn-primary btn-lg fa fa-hand-o-down" />
+							<h:commandButton id="jointEstimation" value="Joint Estimation"
+								action="#{contextMB.jointEstimation}" update="@form"
+								styleClass="btn btn-info btn-lg fa fa-hand-o-down" />
 							<h:commandButton id="reset" value="Reset"
 								action="#{contextMB.reset}" update="@form"
 								styleClass="btn btn btn-warning btn-lg fa fa-hand-o-down" />
 						</div>
 					</div>
 
-					<div class="panel-body" align="center">
-						<h3 style="margin-top: 0">Examinees</h3>
-					</div>
-					<!-- Examinee table -->
-					<p:dataTable id="examineeTable" style="border-style:none"
-						value="#{contextMB.iVecs}" var="ivec" rowIndexVar="rowIndex"
-						paginator="false">
+					<c:if test="#{contextMB.pageChose == 2}">
+						<div id="thetaMle">
+							<ui:insert name="header">
+								<ui:include src="resources/template/screen/thetaMle.xhtml" />
+							</ui:insert>
+						</div>
 
-						<p:column headerText="#" width="7%">
-							<p:outputLabel value="#{rowIndex +1}" />
-						</p:column>
+					</c:if>
+					
+					<c:if test="#{contextMB.pageChose == 3}">
+						<div id="thetaMle">
+							<ui:insert name="header">
+								<ui:include src="resources/template/screen/jointMle.xhtml" />
+							</ui:insert>
+						</div>
 
-						<p:column headerText="Theta" colspan="1" width="24%">
-							<p:outputLabel value="#{ivec.theta}" title="Theta"
-								class="label label-success" />
+					</c:if>
 
-						</p:column>
-
-						<p:column headerText="Responses" colspan="2"
-							style="background-color:#F7F2E0">
-							<p:outputLabel value="#{ivec.responseVector}" />
-						</p:column>
-
-					</p:dataTable>
 				</div>
 			</div>
 		</div>
 
-		<!-- Footer -->
-		<footer>
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-10 col-lg-offset-1 text-center">
-
-					<hr class="small" />
-					<p class="text-muted">Copyright &copy; Victor Jatobá 2017</p>
-				</div>
-			</div>
-		</div>
-		</footer>
+		<ui:include src="resources/template/footer.xhtml"></ui:include>
+		<ui:include src="resources/template/loading.xhtml"></ui:include>
 	</h:form>
 </body>
 </html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<body>
+	<div class="panel-body" align="center">
+		<h3 style="margin-top: 0">Items</h3>
+
+		<p:outputLabel value="#{Constants.aParamLSAT7[0]}" />
+	</div>
+
+	<!-- Items table -->
+	<p:dataTable id="itemTable" style="border-style:none"
+		value="#{contextMB.irms}" var="irm" rowIndexVar="rowIndex"
+		paginator="false">
+
+		<p:column headerText="#" width="7%">
+			<p:outputLabel value="#{rowIndex +1}" />
+		</p:column>
+
+		<p:column headerText="Name" colspan="1">
+			<p:outputLabel value="#{irm.name}" title="Name" />
+		</p:column>
+
+		<p:column headerText="Number Of Parameters" colspan="1">
+			<p:outputLabel value="#{irm.numberOfParameters}"
+				title="Number Of Parameters" />
+		</p:column>
+
+		<p:column headerText="Difficulty" colspan="1">
+			<p:outputLabel value="#{irm.difficulty}" title="Difficulty" />
+		</p:column>
+
+		<p:column headerText="Discrimination" colspan="1">
+			<p:outputLabel value="#{irm.discrimination}" title="Discrimination" />
+		</p:column>
+
+		<p:column headerText="Guessing" colspan="1">
+			<p:outputLabel value="#{irm.guessing}" title="Guessing" />
+		</p:column>
+
+	</p:dataTable>
+
+	<br />
+	<br />
+
+	<div class="panel-body" align="center">
+		<h3 style="margin-top: 0">Examinees</h3>
+	</div>
+	
+	<!-- Examinee table -->
+	<p:dataTable id="examineeTable" style="border-style:none"
+		value="#{contextMB.iVecs}" var="ivec" rowIndexVar="rowIndex"
+		paginator="false">
+
+		<p:column headerText="#" width="7%">
+			<p:outputLabel value="#{rowIndex +1}" />
+		</p:column>
+
+		<p:column headerText="Theta" colspan="1" width="24%">
+			<p:outputLabel value="#{ivec.theta}" title="Theta"
+				class="label label-success" />
+
+		</p:column>
+
+		<p:column headerText="Responses" colspan="2"
+			style="background-color:#F7F2E0">
+			<p:outputLabel value="#{ivec.responseVector}" />
+		</p:column>
+
+	</p:dataTable>
+</body>
+</html>
