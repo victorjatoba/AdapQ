@@ -48,6 +48,6 @@ public class Constants {
 	// IRT Params
 	public static double[] aParamLSAT7 = { 0.5760746525, 0.6713629131, 0.9567791258, 0.4266571055, 0.4398755432 };
 	public static double[] bParamLSAT7 = { -1.8877222528, -0.7154624410, -1.0825764537, -0.6760358283, -2.4772429769 };
-	public static double minTheta = -9.0;// in lieu of negative infinity
-	public static double maxTheta = 9.0;// in lieu of positive infinity
+	public static double minTheta = -4.0;// in lieu of negative infinity
+	public static double maxTheta = 4.0;// in lieu of positive infinity
 }
