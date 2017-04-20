@@ -16,7 +16,7 @@
 	<!-- Items table -->
 	<p:dataTable id="itemTable" style="border-style:none"
 		value="#{contextMB.irms}" var="irm" rowIndexVar="rowIndex"
-		paginator="false">
+		paginator="true" rows="50">
 
 		<p:column headerText="#" width="7%">
 			<p:outputLabel value="#{rowIndex +1}" />
@@ -55,7 +55,7 @@
 	<!-- Examinee table -->
 	<p:dataTable id="examineeTable" style="border-style:none"
 		value="#{contextMB.iVecsModel}" var="ivec" rowIndexVar="rowIndex"
-		paginator="false">
+		paginator="true" rows="100">
 
 		<p:column headerText="#" width="7%">
 			<p:outputLabel value="#{rowIndex +1}" />

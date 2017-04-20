@@ -18,8 +18,6 @@
  */
 package managedBean;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -29,11 +27,9 @@ import javax.faces.bean.SessionScoped;
 import util.Constants;
 import util.FacesUtil;
 import util.FileUploadUtil;
+import analysis.IrtCalculator;
 
-import com.itemanalysis.psychometrics.data.VariableName;
 import com.itemanalysis.psychometrics.irt.estimation.IrtExaminee;
-import com.itemanalysis.psychometrics.irt.estimation.JointMaximumLikelihoodEstimation;
-import com.itemanalysis.psychometrics.irt.model.Irm3PL;
 import com.itemanalysis.psychometrics.irt.model.ItemResponseModel;
 
 import data.ExamineeModel;
@@ -48,6 +44,7 @@ public class ContextMB {
 	private List<ExamineeModel> iVecsModel;
 	private List<ItemResponseModel> irms;
 	private int pageChose;
+	private IrtCalculator irtCalculator;
 
 	public ContextMB() {
 		this.clearFields();
@@ -68,6 +65,7 @@ public class ContextMB {
 
 	@PostConstruct
 	public void init() {
+		irtCalculator = new IrtCalculator();
 	}
 
 	/**
@@ -79,126 +77,30 @@ public class ContextMB {
 
 		// Init dataset
 		byte[][] lsat7 = FileUploadUtil.readTestData("lsat7.txt", 32, 5);
-		iVecs = this.mountExamineeList(lsat7);
+		irtCalculator.mountExamineeList(lsat7);
+		this.irms = irtCalculator.getIrms();
+
+		irtCalculator.runMaximumLikelihood2PL();
+		this.iVecs = irtCalculator.getiVecs();
 
 		this.pageChose = Page.THETA_MLE.getValue();
-		this.runMaximumLikelihood2PL();
-
-		// return goToHomePage();
 		return "";
 	}
 
 	public String jointEstimation() {
 		this.clearFields();
 
-		this.pageChose = Page.JOINT_MLE.getValue();
-
 		// this.runJointMleRasch("tap-data.txt");
-		this.runJointMleRasch("enem2012.txt");
+		irtCalculator.runJointMleRasch("enem2012.txt");
+		iVecsModel = irtCalculator.getiVecsModel();
+		irms = irtCalculator.getIrms();
 
-		// return goToHomePage();
+		this.pageChose = Page.JOINT_MLE.getValue();
 		return "";
-	}
-
-	/**
-	 * 
-	 * @param dataSet
-	 * @return
-	 */
-	private List<IrtExaminee> mountExamineeList(byte[][] dataSet) {
-		int n = Constants.aParamLSAT7.length;
-		int nPeople = dataSet.length;
-
-		ItemResponseModel[] irmArray = new ItemResponseModel[n];
-		irms = new ArrayList<ItemResponseModel>();
-
-		// create item response models objects
-		VariableName iName = null;
-		for (int i = 0; i < n; i++) {
-			String name = "Item" + i;
-			iName = new VariableName(name);
-			Irm3PL irm = new Irm3PL(Constants.aParamLSAT7[i], Constants.bParamLSAT7[i], 1.702);
-			irm.setName(iName);
-
-			irmArray[i] = irm;
-		}
-
-		this.irms = Arrays.asList(irmArray);
-		List<IrtExaminee> iVecs = new ArrayList<IrtExaminee>();
-
-		for (int j = 0; j < nPeople; j++) {
-			IrtExaminee iVec = new IrtExaminee(irmArray);
-			iVec.setResponseVector(dataSet[j]);
-			iVecs.add(iVec);
-		}
-
-		return iVecs;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public void runMaximumLikelihood2PL() {
-
-		double mle = 0.0;
-
-		for (IrtExaminee irtExaminee : iVecs) {
-			mle = irtExaminee.maximumLikelihoodEstimate(Constants.minTheta, Constants.maxTheta);
-			irtExaminee.mleStandardErrorAt(mle);
-		}
-
-	}
-
-	/**
-	 * This test involves the TAP data from Wright and Stone's Best Test Design text. It is also the data in WINSTEPS example1.
-	 *
-	 * Using the values jmle.estimateParameters(150, 0.00001, 1, .01), jMetrik should give four decimal places of accuracy with winsteps when winsteps uses the
-	 * same convergence criterion (i.e control file uses CONVERGE=L and LCONV = 0.00001.) More decimal places of accuracy are possible if use a more stringent
-	 * criterion.
-	 *
-	 */
-	public void runJointMleRasch(String dataName) {
-		System.out.println("JMLE TAP DATA TEST");
-		// byte[][] data = FileUploadUtil.readTestData(dataName, 35, 18);
-		byte[][] data = FileUploadUtil.readTestData(dataName, 1414, 175);
-		int nItems = data[0].length;
-		int nPeople = data.length;
-
-		ItemResponseModel[] irm = new ItemResponseModel[nItems];
-		for (int i = 0; i < nItems; i++) {
-			irm[i] = new Irm3PL(0.0, 1.0);
-			irm[i].setName(new VariableName("V" + (i + 1)));
-		}
-
-		JointMaximumLikelihoodEstimation jmle = new JointMaximumLikelihoodEstimation(data, irm);
-		jmle.summarizeData(0.3);
-
-		jmle.itemProx();
-		jmle.estimateParameters(150, 0.00001);
-		jmle.computeItemStandardErrors();
-		jmle.computePersonStandardErrors();
-		jmle.computeItemFitStatistics();
-
-		double[] theta = jmle.getPersonEstimates();
-		this.irms = Arrays.asList(jmle.getItems());
-
-		this.iVecsModel = new ArrayList<ExamineeModel>();
-		for (int j = 0; j < nPeople; j++) {
-			ExamineeModel iVecModel = new ExamineeModel(jmle.getItems());
-			iVecModel.setTheta(theta[j]);
-			iVecModel.getExaminee().setResponseVector(data[j]);
-			iVecsModel.add(iVecModel);
-		}
-
 	}
 
 	public void reset() {
 		this.clearFields();
-	}
-
-	public String goToNewStudyPlan() {
-		return "index";
 	}
 
 	public String goToHomePage() {
