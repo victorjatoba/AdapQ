@@ -1,13 +1,28 @@
+# @author : Victor Jatoba
+# @email  : victorjatoba10@gmail.com
+# @date   : 21/04/2017
+
+# General Files
+
+*.tmp
+
+# Windows Files
+
+*.ini
+
+# Linux Files
+
+*~
+
+# Eclipse Files
+
+.settings/*
+.classpath
+.project
+.metadata/*
+
+# Java Files
+
 *.class
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.ear
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
 /target/
+/build/
