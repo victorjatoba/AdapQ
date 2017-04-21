@@ -6,6 +6,8 @@ public class Constants {
 	public static final String USER_LOGGED = "userLogged";
 
 	public static final String CONTEXT_MB = "contextMB";
+	public static final String QUESTION_MB = "questionMB";
+	public static final String EXERCISE_MB = "exerciseMB";
 
 	public static final String PAGE_SUCESS = "sucess";
 	public static final String PAGE_LOGIN = "login";

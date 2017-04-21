@@ -64,73 +64,41 @@
 			</ui:insert>
 		</div>
 
-		<div class="starter-template">
+		<!-- Page Content A -->
+		<div class="container">
+			<div class="starter-template">
+				<img class="img-responsive center-block"
+					src="../resources/img/logo.png" width="10%" height="10%"
+					alt="AdapQuest" title="AdapQuest" />
+				<h1>
+					<strong class="lilac-color">Adap</strong><strong
+						class="lilac-light-color">Quest</strong>
+				</h1>
+				<p class="lead">Adapting Questions to the student ability</p>
+			</div>
+		</div>
+		<!-- /.container -->
 
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-9 col-sm-offset-1">
+		<!-- Page Content B -->
+		<div class="container">
+			<div class="row">
 
-						<p:dataGrid var="question" value="#{exerciseMB.listQuestionModel}"
-							columns="1" layout="grid" rows="1" paginator="true"
-							id="dataGridquestions" rowIndexVar="index"
-							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-							rowsPerPageTemplate="1,6,12,16">
-
-							<f:facet name="header">
-								<h:outputText value="Questões ENEM" />
-							</f:facet>
-
-							<p:panel style="text-align:justify">
-								<div>
-									<p:outputLabel value="#{index+1}" class="label label-primary" />
-									<p:spacer height="10" width="20" />
-									<h:outputText value="#{question.description}"
-										styleClass="textQuestionClass" />
-								</div>
-								<br />
-
-								<div id="QUESTION-#{question.id}">
-									<p:dataList id="dataListOptions" var="option"
-										value="#{question.listOptionModel}" rowIndexVar="index"
-										type="definition" emptyMessage="--">
-										<h:panelGrid columns="5">
-											<h:selectBooleanCheckbox value="#{option.response}"
-												style="cursor:pointer;"
-												onclick="radioButton(this, 'QUESTION-#{question.id}');" />
-											<p:spacer height="50" width="20" />
-											<h:outputText value="#{option.letterShow}" />
-											<p:spacer height="50" width="20" />
-											<h:outputText value="#{option.description}"
-												styleClass="textQuestionClass" />
-										</h:panelGrid>
-									</p:dataList>
-								</div>
-
-								<div class="row form-group">
-									<div class="col-xs-12">
-										<p:messages id="messages" showDetail="true" />
-									</div>
-								</div>
-								<div class="row form-group">
-									<div class="col-xs-2">
-										<h:commandButton value="Responder"
-											styleClass="btn btn-success pull-left" onmouseover=""
-											action="#{exerciseMB.respondQuestion}">
-											<f:ajax
-												render=":form:dataGridquestions:messages :form:panelAnswers"
-												execute="dataGridquestions" />
-											<f:setPropertyActionListener value="#{question}"
-												target="#{exerciseMB.responseQuestionModel}" />
-										</h:commandButton>
-									</div>
-								</div>
-							</p:panel>
-						</p:dataGrid>
+				<div align="center">
+					<div class="btn-group" role="group" aria-label="...">
+						<h:commandButton value="Start" id="linkQuestion"
+							title="Questionário" action="#{contextMB.answerQuestionnaire}"
+							styleClass="btn btn-primary btn-lg fa fa-hand-o-down glyphicon glyphicon-list-alt"
+							rendered="#{exerciseMB.listQuestionModel != null}">
+						</h:commandButton>
 
 					</div>
 				</div>
+
 			</div>
 		</div>
+		<!-- /.container -->
+
+		<br />
 
 		<ui:include src="../resources/template/loading.xhtml"></ui:include>
 
@@ -139,6 +107,7 @@
 				<ui:include src="../resources/template/footer.xhtml" />
 			</ui:insert>
 		</div>
+
 	</h:form>
 
 </body>

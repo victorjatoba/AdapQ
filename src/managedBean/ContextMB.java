@@ -103,6 +103,17 @@ public class ContextMB {
 		return "";
 	}
 
+	public String answerQuestionnaire() {
+
+		FacesUtil.removeManagedBeanInSession(Constants.EXERCISE_MB);
+
+		ExerciseMB exerciseMB = new ExerciseMB();
+
+		FacesUtil.setManagedBeanInSession(Constants.EXERCISE_MB, exerciseMB);
+
+		return Constants.PAGE_EXERCISE;
+	}
+
 	/**
 	 * Log out. Remove the object UserModel of session
 	 * 
@@ -118,6 +129,11 @@ public class ContextMB {
 		this.actualPage = Page.LOGIN.getName();
 
 		return goToHomePage();
+	}
+
+	public String goToDashboardPage() {
+		this.actualPage = Page.LOGIN.getName();
+		return "sucess";
 	}
 
 	public void reset() {

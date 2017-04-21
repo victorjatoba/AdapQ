@@ -7,7 +7,6 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -32,7 +31,8 @@
 	<link href="resources/css/default.css" rel="stylesheet" />
 
 	<!-- Custom Fonts -->
-	<link href="resources/bootstrap/fonts/css/font-awesome.min.css"
+	<link
+		href="resources/bootstrap-3.3.7-dist/fonts/css/font-awesome.min.css"
 		rel="stylesheet" type="text/css" />
 	<link
 		href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic"
@@ -58,11 +58,47 @@
 
 	<h:form id="form" enctype="multipart/form-data">
 
-		<div id="header">
-			<ui:insert name="header">
-				<ui:include src="resources/template/header.xhtml" />
-			</ui:insert>
+		<!-- HEADER -->
+		<!-- Navigation -->
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<img class="navbar-brand" src="resources/img/logo.png"
+					alt="AdapQuest" title="AdapQuest" /> <span
+					class="navbar-brand topnav"><strong class="lilac-color">Adap</strong><strong
+					class="lilac-light-color">Quest</strong></span>
+			</div>
+			<div id="navbar" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><p:commandLink value="Home"
+							aria-hidden="true" action="#{contextMB.goToHomePage}" /></li>
+					<li><p:commandLink value="Contact" update="@form"
+							action="#{contextMB.goToContactPage}" /></li>
+					<li id="about"><p:commandLink value="About" update="@form"
+							action="#{contextMB.goToContactPage}" /></li>
+				</ul>
+
+				<ul class="nav navbar-nav navbar-right">
+					<c:if test="#{userLoginMB.userLogged}">
+						<p:panel style="text-align: center">
+							<h:panelGrid>
+								<h:outputLabel value="Welcome #{userLoginMB.userModel.showName}" />
+								<p:commandLink value="Sair" style="color: powderblue"
+									action="#{contextMB.logOutgoToLoginPage}" />
+							</h:panelGrid>
+						</p:panel>
+					</c:if>
+				</ul>
+			</div>
 		</div>
+		</nav>
+		<!--/.navbar -->
 
 		<!-- Page Content A -->
 		<!-- Register components -->
@@ -77,8 +113,9 @@
 						</div>
 						<div class="col-md-6">
 							<div class="starter-template">
-								<img class="img-responsive center-block" src="resources/img/logo.png"
-									width="10%" height="10%" alt="AdapQuest" title="AdapQuest" />
+								<img class="img-responsive center-block"
+									src="resources/img/logo.png" width="10%" height="10%"
+									alt="AdapQuest" title="AdapQuest" />
 								<h1>
 									<strong class="lilac-color">Adap</strong><strong
 										class="lilac-light-color">Quest</strong>
@@ -93,67 +130,15 @@
 		</c:if>
 		<!-- Page Content A -->
 
-		<!-- Page Content B -->
-		<!-- System home -->
-		<c:if test="#{userLoginMB.userLogged}">
-			<div class="container">
-				<div class="starter-template">
-					<img class="img-responsive center-block"
-						src="resources/img/logo.png" width="10%" height="10%"
-						alt="AdapQuest" title="AdapQuest" />
-					<h1>
-						<strong class="lilac-color">Adap</strong><strong
-							class="lilac-light-color">Quest</strong>
-					</h1>
-					<p class="lead">Adapting Questions to the student ability</p>
-				</div>
-			</div>
-			<!-- /.container -->
-
-			<div class="panel panel-default">
-				<div class="container">
-					<div class="row">
-
-						<div align="center">
-							<div class="btn-group" role="group" aria-label="...">
-								<h:commandButton id="thetaEstimation"
-									value="Estimate theta known item"
-									action="#{contextMB.thetaEstimationKnownItem}" update="@form"
-									styleClass="btn btn-primary btn-lg fa fa-hand-o-down" />
-								<h:commandButton id="jointEstimation" value="Joint Estimation"
-									action="#{contextMB.jointEstimation}" update="@form"
-									styleClass="btn btn-info btn-lg fa fa-hand-o-down" />
-								<h:commandButton id="reset" value="Reset"
-									action="#{contextMB.reset}" update="@form"
-									styleClass="btn btn btn-warning btn-lg fa fa-hand-o-down" />
-							</div>
-						</div>
-
-						<c:if test="#{contextMB.pageChose == 2}">
-							<div id="thetaMle">
-								<ui:insert name="thetaMle">
-									<ui:include src="resources/template/screen/thetaMle.xhtml" />
-								</ui:insert>
-							</div>
-
-						</c:if>
-
-						<c:if test="#{contextMB.pageChose == 3}">
-							<div id="thetaMle">
-								<ui:insert name="jointMle">
-									<ui:include src="resources/template/screen/jointMle.xhtml" />
-								</ui:insert>
-							</div>
-
-						</c:if>
-
-					</div>
-				</div>
-			</div>
-		</c:if>
+		<!-- Loading -->
+		<p:ajaxStatus onstart="PF('statusDialog').show()"
+			onsuccess="PF('statusDialog').hide()" />
+		<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+			closable="false" resizable="false" showHeader="false">
+			<p:graphicImage value="resources/img/loading_atomic.gif" width="100%" />
+		</p:dialog>
 
 		<ui:include src="resources/template/footer.xhtml"></ui:include>
-		<ui:include src="resources/template/loading.xhtml"></ui:include>
 	</h:form>
 </body>
 </html>

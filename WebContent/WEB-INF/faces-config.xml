@@ -7,6 +7,12 @@
 	<navigation-rule>
 		<from-view-id>*</from-view-id>
 		<navigation-case>
+			<from-outcome>sucess</from-outcome>
+			<to-view-id>/userPages/dashboard.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
 			<from-outcome>home</from-outcome>
 			<to-view-id>/home.xhtml</to-view-id>
 			<redirect />
@@ -17,10 +23,16 @@
 			<to-view-id>/pages/index.xhtml</to-view-id>
 			<redirect />
 		</navigation-case>
-		
+
 		<navigation-case>
 			<from-outcome>login</from-outcome>
 			<to-view-id>/pages/login.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+
+		<navigation-case>
+			<from-outcome>exercise</from-outcome>
+			<to-view-id>/userPages/exercise.xhtml</to-view-id>
 			<redirect />
 		</navigation-case>
 	</navigation-rule>
