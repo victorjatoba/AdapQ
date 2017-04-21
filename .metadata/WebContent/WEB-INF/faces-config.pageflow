@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf14916842919210" configfile="/AdapQuest/WebContent/WEB-INF/faces-config.xml">
-  <nodes xsi:type="pageflow:PFPage" name="*" id="pf14916876016710" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf14916876016714 pf14916876377409" path="*"/>
-  <nodes xsi:type="pageflow:PFPage" name="home.xhtml" id="pf14916876016718" referenceLink="//@navigationRule.0/@navigationCase.3/@toViewId|" inlinks="pf14916876016714" path="/home.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="*" id="pf14916876016710" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf14916876016714 pf14916876377409 pf14927397953420" path="*"/>
+  <nodes xsi:type="pageflow:PFPage" name="home.xhtml" id="pf14916876016718" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf14916876016714" path="/home.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="pages/index.xhtml" id="pf149168763774010" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" inlinks="pf14916876377409" path="/pages/index.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/login.xhtml" id="pf14927397953421" referenceLink="//@navigationRule.0/@navigationCase.2/@toViewId|" inlinks="pf14927397953420" path="/pages/login.xhtml"/>
   <links id="pf14916876016714" target="pf14916876016718" source="pf14916876016710" outcome="home" redirect="true"/>
   <links id="pf14916876377409" target="pf149168763774010" source="pf14916876016710" outcome="index" redirect="true"/>
+  <links id="pf14927397953420" target="pf14927397953421" source="pf14916876016710" outcome="login" redirect="true"/>
 </pageflow:Pageflow>

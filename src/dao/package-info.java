@@ -16,16 +16,8 @@
  * from, out of or in connection with the software or the use
  * or other dealings in the software.
  */
-package cat;
-
 /**
- * 
  * @author victorjatoba
  *
  */
-public class CatEngine {
-
-	public void start() {
-
-	}
-}
+package dao;

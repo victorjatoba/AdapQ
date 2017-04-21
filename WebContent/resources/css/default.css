@@ -1,0 +1,146 @@
+.spaceRows td {
+	padding: 10px;
+}
+
+/* Setting the collor of the Ray icon */
+span.glyphicon.glyphicon-flash {
+	color: #ffff38;
+}
+
+.ui-panelgrid td, .ui-panelgrid tr {
+	border-style: none !important;
+}
+
+/* Removing thumbnail border */
+.thumbnail {
+	border: 0 none !important;
+	box-shadow: none !important;
+}
+
+/* Study Plan page vip banner */
+.bannerVip {
+	padding: 100px 0;
+	color: #f8f8f8;
+	background: url(../img/vip.jpg) no-repeat center center;
+	background-size: cover;
+}
+
+/* Revoving border on datatable cell */
+.ui-datalist-content.ui-widget-content {
+	border: none;
+}
+
+/* the first page content would be more dark than header */
+.content-section-a {
+	background-color: #F2F2F2;
+}
+
+/* Removing background color from datatable cell content */
+.ui-datalist-content.ui-widget-content {
+	background-color: initial;
+}
+
+.lilac-color {
+	color: #7A75B5;
+}
+
+.lilac-light-color {
+	color: #C8C5E2;
+}
+
+#divLinearGradient {
+	background-image: linear-gradient(to right, green, #FFCC00, red);
+}
+
+#sliderDiscipline {
+	cursor: pointer;
+	background-image: linear-gradient(to right, green, #FFCC00, red);
+}
+
+#grad1 {
+	height: 200px;
+	background: -webkit-linear-gradient(left, red, blue);
+	/* For Safari 5.1 to 6.0 */
+	background: -o-linear-gradient(right, red, blue);
+	/* For Opera 11.1 to 12.0 */
+	background: -moz-linear-gradient(right, red, blue);
+	/* For Firefox 3.6 to 15 */
+	background: linear-gradient(to right, red, blue);
+	/* Standard syntax (must be last) */
+}
+
+.choices td {
+	font-size: 10pt;
+}
+
+.radioClass {
+	border: 0px;
+	background-color: none;
+}
+
+/* Show accordion icon*/
+.ui-accordion .ui-accordion-header .ui-icon {
+	display: block;
+}
+
+/* Accordion background color selected*/
+.ui-accordion-header.ui-helper-reset.ui-state-default.ui-state-active.ui-corner-top
+	{
+	background: #E6E6E6;
+}
+
+/* Accordion font size*/
+.ui-accordion-header.ui-helper-reset.ui-state-default {
+	font-size: 18px;
+}
+
+/* Accordian font size menu*/
+.styleAccordion-header .ui-accordion-header.ui-helper-reset.ui-state-default {
+	font-size: 11px;
+}
+
+/* Thumbnail without border*/
+.ui-panel.ui-widget.ui-widget-content.ui-corner-all {
+	border: none;
+}
+
+/* Thumbnail without border*/
+.ui-datagrid-content.ui-widget-content.ui-grid.ui-grid-responsive {
+	border: none;
+}
+
+/* Style of table Study Plan*/
+.tableStudyPlanClass table { 
+    border-collapse: separate; 
+    border-spacing: 10px; 
+    *border-collapse: expression('separate', cellSpacing = '10px');
+}
+
+/* Style of label Question Page*/
+.textQuestionClass {
+	font-family: Tahoma, Geneva, sans-serif;
+	line-height: 1.4em;
+  	padding-right: 14px;
+  	letter-spacing: 0.02em;  	
+  	font-size: 0.9em;
+}
+
+/* Style of color message info*/
+.ui-messages-info, .ui-message-info {
+  color: #088A08;
+  background-color: #81F781;
+  border-color: #4cae4c;
+}
+
+/* Style of selectOneButton in availability page*/
+.styleClassSelectOneButton div:first-child span {
+    color: #FE2E2E;
+}
+
+.styleClassSelectOneButton div:nth-child(2) span {
+    color: #B18904; 
+}
+
+.styleClassSelectOneButton div:nth-child(3) span {
+    color: #21610B;  	
+}

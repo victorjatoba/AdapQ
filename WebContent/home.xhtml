@@ -13,8 +13,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="description" content="AdapQuest - Adapting the Learn" />
 	<meta name="author" content="" />
-	<link rel="icon" href="resources/img/myt_marca_transparent.png"
-		title="AdapQuest" lang="AdapQuest" />
+	<link rel="icon" href="resources/img/logo.png" title="AdapQuest"
+		lang="AdapQuest" />
 
 	<title>AdapQuest - Adapting student learn</title>
 
@@ -22,10 +22,18 @@
 	<link href="resources/bootstrap-3.3.7-dist/css/bootstrap.min.css"
 		rel="stylesheet" />
 
+	<!-- Custom CSS -->
+	<link href="resources/css/landing-page.css" rel="stylesheet" />
+
 	<!-- Custom styles for this template -->
 	<link href="resources/css/starter-template.css" rel="stylesheet" />
 
+	<!-- Default styles for this template -->
+	<link href="resources/css/default.css" rel="stylesheet" />
+
 	<!-- Custom Fonts -->
+	<link href="resources/bootstrap/fonts/css/font-awesome.min.css"
+		rel="stylesheet" type="text/css" />
 	<link
 		href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic"
 		rel="stylesheet" type="text/css" />
@@ -56,58 +64,95 @@
 			</ui:insert>
 		</div>
 
-		<div class="container">
-			<div class="starter-template">
-				<img class="img-responsive center-block"
-					src="resources/img/logo.png" width="10%" height="10%"
-					alt="AdapQuest" title="AdapQuest" />
-				<h1>Adap Quest</h1>
-				<p class="lead">Adapting Questions (items) to the student
-					ability</p>
-			</div>
-		</div>
-		<!-- /.container -->
-
-		<div class="panel panel-default">
-			<div class="container">
-				<div class="row">
-
-					<div align="center">
-						<div class="btn-group" role="group" aria-label="...">
-							<h:commandButton id="thetaEstimation"
-								value="Estimate theta known item"
-								action="#{contextMB.thetaEstimationKnownItem}" update="@form"
-								styleClass="btn btn-primary btn-lg fa fa-hand-o-down" />
-							<h:commandButton id="jointEstimation" value="Joint Estimation"
-								action="#{contextMB.jointEstimation}" update="@form"
-								styleClass="btn btn-info btn-lg fa fa-hand-o-down" />
-							<h:commandButton id="reset" value="Reset"
-								action="#{contextMB.reset}" update="@form"
-								styleClass="btn btn btn-warning btn-lg fa fa-hand-o-down" />
+		<!-- Page Content A -->
+		<!-- Register components -->
+		<c:if test="#{!userLoginMB.userLogad}">
+			<div id="top" class="content-section-a registerBackground">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-6">
+							<ui:insert name="modules">
+								<ui:include src="/pages/login.xhtml" />
+							</ui:insert>
 						</div>
+						<div class="col-md-6">
+							<div class="starter-template">
+								<img class="img-responsive center-block" src="resources/img/logo.png"
+									width="10%" height="10%" alt="AdapQuest" title="AdapQuest" />
+								<h1>
+									<strong class="lilac-color">Adap</strong><strong
+										class="lilac-light-color">Quest</strong>
+								</h1>
+								<p class="lead">Adapting Questions (items) to the student
+									ability</p>
+							</div>
+						</div>
+
 					</div>
-
-					<c:if test="#{contextMB.pageChose == 2}">
-						<div id="thetaMle">
-							<ui:insert name="thetaMle">
-								<ui:include src="resources/template/screen/thetaMle.xhtml" />
-							</ui:insert>
-						</div>
-
-					</c:if>
-					
-					<c:if test="#{contextMB.pageChose == 3}">
-						<div id="thetaMle">
-							<ui:insert name="jointMle">
-								<ui:include src="resources/template/screen/jointMle.xhtml" />
-							</ui:insert>
-						</div>
-
-					</c:if>
-
 				</div>
 			</div>
-		</div>
+		</c:if>
+		<!-- Page Content A -->
+
+		<!-- Page Content B -->
+		<!-- System home -->
+		<c:if test="#{userLoginMB.userLogad}">
+			<div class="container">
+				<div class="starter-template">
+					<img class="img-responsive center-block"
+						src="resources/img/logo.png" width="10%" height="10%"
+						alt="AdapQuest" title="AdapQuest" />
+					<h1>
+						<strong class="lilac-color">Adap</strong><strong
+							class="lilac-light-color">Quest</strong>
+					</h1>
+					<p class="lead">Adapting Questions (items) to the student
+						ability</p>
+				</div>
+			</div>
+			<!-- /.container -->
+
+			<div class="panel panel-default">
+				<div class="container">
+					<div class="row">
+
+						<div align="center">
+							<div class="btn-group" role="group" aria-label="...">
+								<h:commandButton id="thetaEstimation"
+									value="Estimate theta known item"
+									action="#{contextMB.thetaEstimationKnownItem}" update="@form"
+									styleClass="btn btn-primary btn-lg fa fa-hand-o-down" />
+								<h:commandButton id="jointEstimation" value="Joint Estimation"
+									action="#{contextMB.jointEstimation}" update="@form"
+									styleClass="btn btn-info btn-lg fa fa-hand-o-down" />
+								<h:commandButton id="reset" value="Reset"
+									action="#{contextMB.reset}" update="@form"
+									styleClass="btn btn btn-warning btn-lg fa fa-hand-o-down" />
+							</div>
+						</div>
+
+						<c:if test="#{contextMB.pageChose == 2}">
+							<div id="thetaMle">
+								<ui:insert name="thetaMle">
+									<ui:include src="resources/template/screen/thetaMle.xhtml" />
+								</ui:insert>
+							</div>
+
+						</c:if>
+
+						<c:if test="#{contextMB.pageChose == 3}">
+							<div id="thetaMle">
+								<ui:insert name="jointMle">
+									<ui:include src="resources/template/screen/jointMle.xhtml" />
+								</ui:insert>
+							</div>
+
+						</c:if>
+
+					</div>
+				</div>
+			</div>
+		</c:if>
 
 		<ui:include src="resources/template/footer.xhtml"></ui:include>
 		<ui:include src="resources/template/loading.xhtml"></ui:include>

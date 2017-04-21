@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
 import util.Constants;
@@ -45,6 +46,9 @@ public class ContextMB {
 	private List<ItemResponseModel> irms;
 	private int pageChose;
 	private IrtCalculator irtCalculator;
+
+	@ManagedProperty(value = "#{userLoginMB}")
+	private UserLoginMB userLoginMB;
 
 	public ContextMB() {
 		this.clearFields();
@@ -99,12 +103,33 @@ public class ContextMB {
 		return "";
 	}
 
+	/**
+	 * Log out. Remove the object UserModel of session
+	 * 
+	 * @return go to home page.
+	 * @author anchieta
+	 */
+	public String logOutgoToLoginPage() {
+
+		FacesUtil.removeObjectInSession(Constants.USER_LOGGED);
+
+		// this.userLoginMB.setUserModel(new UserModel()); //TODO descomentar depois
+
+		this.actualPage = Page.LOGIN.getName();
+
+		return goToHomePage();
+	}
+
 	public void reset() {
 		this.clearFields();
 	}
 
 	public String goToHomePage() {
 		return "home";
+	}
+
+	public String goToContactPage() {
+		return "contact";
 	}
 
 	public String getActualPage() {
@@ -145,6 +170,22 @@ public class ContextMB {
 
 	public void setiVecsModel(List<ExamineeModel> iVecsModel) {
 		this.iVecsModel = iVecsModel;
+	}
+
+	public UserLoginMB getUserLoginMB() {
+		return userLoginMB;
+	}
+
+	public void setUserLoginMB(UserLoginMB userLoginMB) {
+		this.userLoginMB = userLoginMB;
+	}
+
+	public IrtCalculator getIrtCalculator() {
+		return irtCalculator;
+	}
+
+	public void setIrtCalculator(IrtCalculator irtCalculator) {
+		this.irtCalculator = irtCalculator;
 	}
 
 }
