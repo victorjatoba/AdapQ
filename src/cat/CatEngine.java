@@ -18,6 +18,11 @@
  */
 package cat;
 
+import javax.faces.bean.ManagedProperty;
+
+import managedBean.UserLoginMB;
+import util.Constants;
+
 /**
  * 
  * @author victorjatoba
@@ -25,7 +30,100 @@ package cat;
  */
 public class CatEngine {
 
+	@ManagedProperty(value = "#{userLoginMB}")
+	private UserLoginMB userLoginMB;
+
 	public void start() {
+		if (userLoginMB.isUserLogged()) {
+			if (!haveStudentEnoughInformation()) {
+				this.selectItemByLevel(Constants.ITEM_LEVEL_MEDIUM);
+			} else {
+				this.selectItemByFit();
+			}
+
+			this.showItem();
+
+		} else {
+			// show User not logged Error Message
+		}
+	}
+
+	public void answer() {
+		boolean userHit = checkAnswer();
+		markItemAsAnswered();
+		updateProficiency();
+
+		if (!finalizationCriteria()) {
+			if (userHit) {
+				selectItemByLevel(Constants.ITEM_LEVEL_HARD);
+			} else {
+				selectItemByLevel(Constants.ITEM_LEVEL_EASY);
+			}
+
+			this.showItem();
+		} else {
+			this.finalizeTest();
+			this.showFeedback();
+		}
 
 	}
+
+	private void showFeedback() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void finalizeTest() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void updateProficiency() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void markItemAsAnswered() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private boolean checkAnswer() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private boolean finalizationCriteria() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private void showItem() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void selectItemByFit() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void selectItemByLevel(int itemLevelMedium) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private boolean haveStudentEnoughInformation() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public UserLoginMB getUserLoginMB() {
+		return userLoginMB;
+	}
+
+	public void setUserLoginMB(UserLoginMB userLoginMB) {
+		this.userLoginMB = userLoginMB;
+	}
+
 }

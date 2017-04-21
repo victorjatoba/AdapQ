@@ -130,7 +130,7 @@ public class UserLoginMB {
 	 * @return boolean
 	 * @author anchieta
 	 */
-	public boolean isUserLogad() {
+	public boolean isUserLogged() {
 
 		boolean logad = true;
 

@@ -50,4 +50,8 @@ public class Constants {
 	public static double[] bParamLSAT7 = { -1.8877222528, -0.7154624410, -1.0825764537, -0.6760358283, -2.4772429769 };
 	public static double minTheta = -4.0;// in lieu of negative infinity
 	public static double maxTheta = 4.0;// in lieu of positive infinity
+
+	public static final int ITEM_LEVEL_EASY = 0;
+	public static final int ITEM_LEVEL_MEDIUM = 1;
+	public static final int ITEM_LEVEL_HARD = 2;
 }

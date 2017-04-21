@@ -66,7 +66,7 @@
 
 		<!-- Page Content A -->
 		<!-- Register components -->
-		<c:if test="#{!userLoginMB.userLogad}">
+		<c:if test="#{!userLoginMB.userLogged}">
 			<div id="top" class="content-section-a registerBackground">
 				<div class="container">
 					<div class="row">
@@ -95,7 +95,7 @@
 
 		<!-- Page Content B -->
 		<!-- System home -->
-		<c:if test="#{userLoginMB.userLogad}">
+		<c:if test="#{userLoginMB.userLogged}">
 			<div class="container">
 				<div class="starter-template">
 					<img class="img-responsive center-block"

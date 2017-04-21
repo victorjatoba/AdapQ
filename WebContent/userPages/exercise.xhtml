@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="description" content="AdapQuest - Adapting the Learn" />
+	<meta name="author" content="" />
+	<link rel="icon" href="../resources/img/logo.png" title="AdapQuest"
+		lang="AdapQuest" />
+
+	<title>AdapQuest - Adaptive Questions</title>
+
+	<!-- Bootstrap Core CSS -->
+	<link href="../resources/bootstrap-3.3.7-dist/css/bootstrap.min.css"
+		rel="stylesheet" />
+
+	<!-- Custom CSS -->
+	<link href="../resources/css/landing-page.css" rel="stylesheet" />
+
+	<!-- Custom styles for this template -->
+	<link href="../resources/css/starter-template.css" rel="stylesheet" />
+
+	<!-- Default styles for this template -->
+	<link href="../resources/css/default.css" rel="stylesheet" />
+
+	<!-- Custom Fonts -->
+	<link href="../resources/bootstrap/fonts/css/font-awesome.min.css"
+		rel="stylesheet" type="text/css" />
+	<link
+		href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic"
+		rel="stylesheet" type="text/css" />
+
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+
+	<!-- jQuery called by Primefaces -->
+	<h:outputScript library="primefaces" name="jquery/jquery.js"
+		target="head" />
+
+	<h:outputScript library="primefaces" name="jquery/jquery-plugins.js"
+		target="head" />
+
+	<script src="../resources/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+
+	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+	<script src="../resources/js/ie10-viewport-bug-workaround.js"></script>
+</h:head>
+
+<body>
+
+	<h:form id="form" enctype="multipart/form-data">
+
+		<div id="header">
+			<ui:insert name="header">
+				<ui:include src="../resources/template/header.xhtml" />
+			</ui:insert>
+		</div>
+
+		<div class="content-section-a">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-9 col-sm-offset-1">
+
+						<p:dataGrid var="question"
+							value="#{exerciseMB.subjectModel.listQuestionModel}" columns="1"
+							layout="grid" rows="1" paginator="true" id="dataGridquestions"
+							rowIndexVar="index"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="1,6,12,16">
+
+							<f:facet name="header">
+								<h:outputText
+									value="Questões de #{exerciseMB.subjectModel.name}" />
+							</f:facet>
+
+							<p:panel style="text-align:justify">
+								<div>
+									<p:outputLabel value="#{index+1}" class="label label-primary" />
+									<p:spacer height="10" width="20" />
+									<h:outputText value="#{question.description}"
+										styleClass="textQuestionClass" />
+								</div>
+								<br />
+
+								<p:dataList id="dataListImages" var="image"
+									value="#{question.listImageQuestionModel}" rowIndexVar="index"
+									type="definition" emptyMessage=""
+									rendered="#{question.listImageQuestionModel != null}">
+									<center>
+										<p:column style="padding: 25px;">
+											<p:graphicImage id="captchaImageQuestion"
+												value="#{exerciseMB.imageStreamContent}" width="60%"
+												cache="false">
+												<f:param name="idImage" value="#{image.id}" />
+											</p:graphicImage>
+										</p:column>
+									</center>
+								</p:dataList>
+								<br />
+
+								<div id="QUESTION-#{question.id}">
+									<p:dataList id="dataListOptions" var="option"
+										value="#{question.listOptionModel}" rowIndexVar="index"
+										type="definition" emptyMessage="--">
+										<h:panelGrid columns="5">
+											<h:selectBooleanCheckbox value="#{option.response}"
+												style="cursor:pointer;"
+												onclick="radioButton(this, 'QUESTION-#{question.id}');" />
+											<p:spacer height="50" width="20" />
+											<h:outputText value="#{option.letterShow}" />
+											<p:spacer height="50" width="20" />
+											<h:outputText value="#{option.description}"
+												styleClass="textQuestionClass" />
+										</h:panelGrid>
+									</p:dataList>
+								</div>
+
+								<div class="row form-group">
+									<div class="col-xs-12">
+										<p:messages id="messages" showDetail="true" />
+									</div>
+								</div>
+								<div class="row form-group">
+									<div class="col-xs-2">
+										<h:commandButton value="Responder"
+											styleClass="btn btn-success pull-left" onmouseover=""
+											action="#{exerciseMB.respondQuestion}">
+											<f:ajax
+												render=":form:dataGridquestions:messages :form:panelAnswers"
+												execute="dataGridquestions" />
+											<f:setPropertyActionListener value="#{question}"
+												target="#{exerciseMB.responseQuestionModel}" />
+										</h:commandButton>
+									</div>
+								</div>
+							</p:panel>
+						</p:dataGrid>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="footer">
+			<ui:insert name="footer">
+				<ui:include src="../resources/template/footer.xhtml" />
+			</ui:insert>
+		</div>
+
+		<ui:include src="../resources/template/loading.xhtml"></ui:include>
+	</h:form>
+
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+
+	<!-- jQuery called by Primefaces -->
+	<h:outputScript library="primefaces" name="jquery/jquery.js"
+		target="head" />
+
+	<h:outputScript library="primefaces" name="jquery/jquery-plugins.js"
+		target="head" />
+
+	<script src="../resources/bootstrap/js/bootstrap.min.js"></script>
+	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+	<script src="../resources/js/ie10-viewport-bug-workaround.js"></script>
+
+	<!-- Google Analytic Property -->
+	<!-- This is the Universal Analytics tracking code for this property. To get all the benefits of Universal Analytics -->
+	<script>
+		(function(i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r;
+			i[r] = i[r] || function() {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date();
+			a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+			a.async = 1;
+			a.src = g;
+			m.parentNode.insertBefore(a, m)
+		})(window, document, 'script',
+				'//www.google-analytics.com/analytics.js', 'ga');
+
+		ga('create', 'UA-61916091-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+
+</body>
+
+</html>
+
