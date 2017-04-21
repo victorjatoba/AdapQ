@@ -27,6 +27,7 @@ import javax.faces.bean.SessionScoped;
 
 import util.Constants;
 import util.FacesUtil;
+import util.FileUploadUtil;
 import analysis.IrtCalculator;
 
 import com.itemanalysis.psychometrics.irt.estimation.IrtExaminee;
@@ -69,6 +70,25 @@ public class ContextMB {
 	@PostConstruct
 	public void init() {
 		irtCalculator = new IrtCalculator();
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public String thetaEstimationKnownItem() {
+		this.clearFields();
+
+		// Init dataset
+		byte[][] lsat7 = FileUploadUtil.readTestData("lsat7.txt", 32, 5);
+		irtCalculator.mountExamineeList(lsat7);
+		this.irms = irtCalculator.getIrms();
+
+		irtCalculator.runMaximumLikelihood2PL();
+		this.iVecs = irtCalculator.getiVecs();
+
+		this.pageChose = Page.THETA_MLE.getValue();
+		return "";
 	}
 
 	public String jointEstimation() {

@@ -52,6 +52,8 @@
 
 	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 	<script src="../resources/js/ie10-viewport-bug-workaround.js"></script>
+
+	<script type="text/javascript" src="../resources/js/functions.js"></script>
 </h:head>
 
 <body>
@@ -64,39 +66,35 @@
 			</ui:insert>
 		</div>
 
-		<div class="starter-template">
-
+		<!-- Page Content A -->
+		<div class="content-section-b">
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-9 col-sm-offset-1">
 
-						<p:dataGrid var="question" value="#{exerciseMB.listQuestionModel}"
-							columns="1" layout="grid" rows="1" paginator="true"
-							id="dataGridquestions" rowIndexVar="index"
-							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-							rowsPerPageTemplate="1,6,12,16">
+						<div class="col-sm-offset-3">
 
-							<f:facet name="header">
-								<h:outputText value="Questões ENEM" />
-							</f:facet>
-
-							<p:panel style="text-align:justify">
+							<p:panel style="text-align:justify" id="questionPanel">
+								<f:facet name="header">
+									<h:outputText value="Questão ENEM 2012" />
+								</f:facet>
+								
 								<div>
-									<p:outputLabel value="#{index+1}" class="label label-primary" />
+									<p:outputLabel value="Q#{exerciseMB.actualQuestion.id}" class="label label-primary" />
 									<p:spacer height="10" width="20" />
-									<h:outputText value="#{question.description}"
+									<h:outputText value="#{exerciseMB.actualQuestion.description}"
 										styleClass="textQuestionClass" />
 								</div>
 								<br />
 
-								<div id="QUESTION-#{question.id}">
+								<div id="QUESTION-#{exerciseMB.actualQuestion.id}">
 									<p:dataList id="dataListOptions" var="option"
-										value="#{question.listOptionModel}" rowIndexVar="index"
-										type="definition" emptyMessage="--">
+										value="#{exerciseMB.actualQuestion.listOptionModel}"
+										rowIndexVar="index" type="definition" emptyMessage="--">
 										<h:panelGrid columns="5">
 											<h:selectBooleanCheckbox value="#{option.response}"
 												style="cursor:pointer;"
-												onclick="radioButton(this, 'QUESTION-#{question.id}');" />
+												onclick="radioButton(this, 'QUESTION-#{exerciseMB.actualQuestion.id}');" />
 											<p:spacer height="50" width="20" />
 											<h:outputText value="#{option.letterShow}" />
 											<p:spacer height="50" width="20" />
@@ -113,20 +111,15 @@
 								</div>
 								<div class="row form-group">
 									<div class="col-xs-2">
-										<h:commandButton value="Responder"
+										<h:commandButton value="Answer"
 											styleClass="btn btn-success pull-left" onmouseover=""
-											action="#{exerciseMB.respondQuestion}">
-											<f:ajax
-												render=":form:dataGridquestions:messages :form:panelAnswers"
-												execute="dataGridquestions" />
-											<f:setPropertyActionListener value="#{question}"
-												target="#{exerciseMB.responseQuestionModel}" />
+											action="#{exerciseMB.responseQuestion}">
+											<f:ajax render=":form:messages" execute="form" />
 										</h:commandButton>
 									</div>
 								</div>
 							</p:panel>
-						</p:dataGrid>
-
+						</div>
 					</div>
 				</div>
 			</div>

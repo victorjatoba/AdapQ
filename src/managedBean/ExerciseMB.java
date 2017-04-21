@@ -34,8 +34,8 @@ import data.QuestionModel;
 public class ExerciseMB {
 
 	private List<QuestionModel> listQuestionModel;
+	private QuestionModel actualQuestion;
 	private OptionModel responseOptionModel;
-	private QuestionModel responseQuestionModel;
 	private String numberOfOption;
 
 	public ExerciseMB() {
@@ -43,8 +43,55 @@ public class ExerciseMB {
 	}
 
 	private void clearFields() {
-		this.responseQuestionModel = new QuestionModel();
-		this.fillListQuestionFake();
+		// this.fillListQuestionFake();
+		this.initFakeQuestion();
+	}
+
+	private void initFakeQuestion() {
+		this.actualQuestion = new QuestionModel();
+		this.actualQuestion.setId(1L);
+		this.actualQuestion
+				.setDescription("Jogar baralho é uma atividade que estimula o raciocínio. Um jogo tradicional é a Paciência, que utiliza 52 cartas. Inicialmente são formadas sete colunas com as cartas. A primeira coluna tem uma carta, a segunda tem duas cartas, a terceira tem três cartas, a quarta tem quatro cartas, e assim sucessivamente até a sétima coluna, a qual tem sete cartas, e o que sobra forma o monte, que são as cartas não utilizadas nas colunas. \nA quantidade de cartas que forma o monte é");
+
+		List<OptionModel> listOptionModel = new ArrayList<OptionModel>();
+
+		OptionModel op = new OptionModel();
+		op.setId(0L);
+		op.setDescription("21");
+		op.setLetterShow(Util.letterOption(0));
+		op.setQuestionModel(this.actualQuestion);
+		listOptionModel.add(op);
+
+		op = new OptionModel();
+		op.setId(1L);
+		op.setDescription("24");
+		op.setLetterShow(Util.letterOption(1));
+		op.setQuestionModel(this.actualQuestion);
+		op.setFlagRight(Boolean.TRUE);
+		listOptionModel.add(op);
+
+		op = new OptionModel();
+		op.setId(2L);
+		op.setDescription("26");
+		op.setLetterShow(Util.letterOption(2));
+		op.setQuestionModel(this.actualQuestion);
+		listOptionModel.add(op);
+
+		op = new OptionModel();
+		op.setId(3L);
+		op.setDescription("28");
+		op.setLetterShow(Util.letterOption(3));
+		op.setQuestionModel(this.actualQuestion);
+		listOptionModel.add(op);
+
+		op = new OptionModel();
+		op.setId(4L);
+		op.setDescription("31");
+		op.setLetterShow(Util.letterOption(4));
+		op.setQuestionModel(this.actualQuestion);
+		listOptionModel.add(op);
+
+		actualQuestion.setListOptionModel(listOptionModel);
 	}
 
 	private void fillListQuestionFake() {
@@ -73,16 +120,20 @@ public class ExerciseMB {
 			op.setLetterShow(Util.letterOption(i));
 			op.setQuestionModel(questionModel);
 
+			if (i == 0) {
+				op.setFlagRight(Boolean.TRUE);
+			}
+
 			listOptionModel.add(op);
 		}
 		return listOptionModel;
 	}
 
-	public String respondQuestion() {
+	public String responseQuestion() {
 
 		boolean checked = false;
 
-		for (OptionModel optionModel : this.responseQuestionModel.getListOptionModel()) {
+		for (OptionModel optionModel : this.actualQuestion.getListOptionModel()) {
 
 			if (optionModel.isResponse()) {
 				checked = true;
@@ -118,14 +169,6 @@ public class ExerciseMB {
 		this.responseOptionModel = responseOptionModel;
 	}
 
-	public QuestionModel getResponseQuestionModel() {
-		return responseQuestionModel;
-	}
-
-	public void setResponseQuestionModel(QuestionModel responseQuestionModel) {
-		this.responseQuestionModel = responseQuestionModel;
-	}
-
 	public String getNumberOfOption() {
 		return numberOfOption;
 	}
@@ -140,6 +183,14 @@ public class ExerciseMB {
 
 	public void setListQuestionModel(List<QuestionModel> listQuestionModel) {
 		this.listQuestionModel = listQuestionModel;
+	}
+
+	public QuestionModel getActualQuestion() {
+		return actualQuestion;
+	}
+
+	public void setActualQuestion(QuestionModel actualQuestion) {
+		this.actualQuestion = actualQuestion;
 	}
 
 }

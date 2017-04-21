@@ -22,6 +22,7 @@
 			</div>
 			<div id="navbar" class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
+					<li id="home" class="active"><p:commandLink value="Home" aria-hidden="true" action="#{contextMB.goToHomePage}" rendered="#{!userLoginMB.userLogged}"/></li>
 					<li id="dashboard" class="active"><p:commandLink value="Dashboard" aria-hidden="true" action="#{contextMB.goToDashboardPage}" rendered="#{userLoginMB.userLogged}"/></li>
 					<li id="contact"><p:commandLink value="Contact" update="@form" action="#{contextMB.goToContactPage}" /></li>
 					<li id="about"><p:commandLink value="About" update="@form" action="#{contextMB.goToContactPage}" /></li>
