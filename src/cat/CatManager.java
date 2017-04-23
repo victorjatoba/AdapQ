@@ -59,11 +59,6 @@ public class CatManager {
 		return questionStarted;
 	}
 
-	private boolean userExist(UserModel user) {
-		// TODO Auto-generated method stub
-		return Boolean.TRUE;
-	}
-
 	public QuestionModel nextQuestion(UserModel user, QuestionModel question, boolean answer) {
 		markItemAsAnswered();
 		updateProficiency();
@@ -73,7 +68,7 @@ public class CatManager {
 			if (answer == Constants.CORRECT_ANSWER) {
 				nextQuestion = this.questionDAO.searchNextMoreHard(question.getDifficulty());
 			} else {
-				nextQuestion = this.questionDAO.find(question);
+				nextQuestion = this.questionDAO.searchNextMoreEasy(question.getDifficulty());
 			}
 
 		} else {
@@ -82,6 +77,11 @@ public class CatManager {
 		}
 
 		return nextQuestion;
+	}
+
+	private boolean userExist(UserModel user) {
+		// TODO Auto-generated method stub
+		return Boolean.TRUE;
 	}
 
 	private void showFeedback() {

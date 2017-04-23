@@ -36,6 +36,7 @@ public class ExerciseMB {
 
 	private List<QuestionModel> listQuestionModel;
 	private QuestionModel actualQuestion;
+	private QuestionModel nextQuestion;
 	private OptionModel responseOptionModel;
 	private String numberOfOption;
 	private CatManager catManager;
@@ -58,9 +59,10 @@ public class ExerciseMB {
 		this.catManager = new CatManager();
 	}
 
-	public String responseQuestion() {
+	public String answerQuestion() {
 
 		boolean checked = false;
+		boolean userAnswerCorrectly = false;
 
 		for (OptionModel optionModel : this.actualQuestion.getListOptionModel()) {
 
@@ -68,11 +70,9 @@ public class ExerciseMB {
 				checked = true;
 				if (optionModel.isFlagRight()) {
 					MessageUtil.addInfoMessage("Parabéns! Você acertou!");
-					// this.exerciseHistoricalModel.setHightAnswear(this.exerciseHistoricalModel.getHightAnswear() + 1);
-					this.actualQuestion = this.catManager.nextQuestion(this.userLoginMB.getUserModel(), this.actualQuestion, Boolean.TRUE);
+					userAnswerCorrectly = true;
 				} else {
 					MessageUtil.addErrorMessage("Resposta errada, tente novamente!");
-					// this.exerciseHistoricalModel.setWrongAnswear(this.exerciseHistoricalModel.getWrongAnswear() + 1);
 				}
 			}
 		}
@@ -80,6 +80,7 @@ public class ExerciseMB {
 		if (!checked) {
 			MessageUtil.addErrorMessage("É necessário escolher uma opção.");
 		} else {
+			this.nextQuestion = this.catManager.nextQuestion(this.userLoginMB.getUserModel(), this.actualQuestion, userAnswerCorrectly);
 
 			// if (!ValidationUtil.isNullOrEmpty(this.exerciseHistoricalModel.getId())) {
 			// this.exerciseHistoricalDAO.update(this.exerciseHistoricalModel);
@@ -88,12 +89,14 @@ public class ExerciseMB {
 			// }
 		}
 
-		return Constants.PAGE_EXERCISE;
+		return null;
 	}
 
-	public String Next() {
+	public String goToNextQuestion() {
+		this.actualQuestion = nextQuestion;
+		this.nextQuestion = null;
 
-		return null;
+		return Constants.PAGE_EXERCISE;
 	}
 
 	public OptionModel getResponseOptionModel() {
@@ -128,4 +131,19 @@ public class ExerciseMB {
 		this.actualQuestion = actualQuestion;
 	}
 
+	public QuestionModel getNextQuestion() {
+		return nextQuestion;
+	}
+
+	public void setNextQuestion(QuestionModel nextQuestion) {
+		this.nextQuestion = nextQuestion;
+	}
+
+	public UserLoginMB getUserLoginMB() {
+		return userLoginMB;
+	}
+
+	public void setUserLoginMB(UserLoginMB userLoginMB) {
+		this.userLoginMB = userLoginMB;
+	}
 }

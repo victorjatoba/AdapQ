@@ -90,6 +90,34 @@ public class QuestionDAO {
 
 	}
 
+	public QuestionModel searchNextMoreEasy(double difficult) {
+
+		List<QuestionModel> easiest = new ArrayList<QuestionModel>();
+		for (QuestionModel question : DaoFake.getQuestions()) {
+			if (question.getDifficulty() < difficult) {
+				easiest.add(question);
+			}
+		}
+
+		// sort by difficulty
+		Collections.sort(easiest, new Comparator<QuestionModel>() {
+			@Override
+			public int compare(QuestionModel q1, QuestionModel q2) {
+				if (q1.getDifficulty() < q2.getDifficulty())
+					return 1;
+				if (q1.getDifficulty() > q2.getDifficulty())
+					return -1;
+				return 0;
+			}
+		});
+
+		if (ValidationUtil.isNullOrEmpty(easiest)) {
+			easiest.set(0, null);
+		}
+
+		return easiest.get(0);
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<QuestionModel> researchQuestionBySubject(QuestionModel questionModel) {
 

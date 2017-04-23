@@ -78,9 +78,13 @@
 								<f:facet name="header">
 									<h:outputText value="Questão ENEM 2012" />
 								</f:facet>
-								
+
 								<div>
-									<p:outputLabel value="Q#{exerciseMB.actualQuestion.id}" class="label label-primary" />
+									<p:outputLabel value="Q#{exerciseMB.actualQuestion.id}"
+										class="label label-primary" />
+									<p:outputLabel
+										value="Dif: #{exerciseMB.actualQuestion.difficulty}"
+										class="label label-warning" />
 									<p:spacer height="10" width="20" />
 									<h:outputText value="#{exerciseMB.actualQuestion.description}"
 										styleClass="textQuestionClass" />
@@ -110,12 +114,17 @@
 									</div>
 								</div>
 								<div class="row form-group">
-									<div class="col-xs-2">
+									<div>
 										<h:commandButton value="Answer"
 											styleClass="btn btn-success pull-left" onmouseover=""
-											action="#{exerciseMB.responseQuestion}">
-											<f:ajax render=":form:messages" execute="form" />
+											action="#{exerciseMB.answerQuestion}">
+											<f:ajax render=":form:messages form:nextQuestion" execute="form" />
 										</h:commandButton>
+										<h:commandButton id="nextQuestion" value="Next"
+											styleClass="btn btn-info pull-left" onmouseover=""
+											action="#{exerciseMB.goToNextQuestion}" disabled="#{exerciseMB.nextQuestion == null}">
+										</h:commandButton>
+
 									</div>
 								</div>
 							</p:panel>
