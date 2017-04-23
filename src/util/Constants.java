@@ -54,6 +54,9 @@ public class Constants {
 	public static double maxTheta = 4.0;// in lieu of positive infinity
 
 	public static final int ITEM_LEVEL_EASY = 0;
-	public static final int ITEM_LEVEL_MEDIUM = 1;
+	public static final int QUESTION_LEVEL_MEDIUM = 1;
 	public static final int ITEM_LEVEL_HARD = 2;
+
+	public static final boolean CORRECT_ANSWER = true;
+	public static final boolean WRONG_ANSWER = false;
 }

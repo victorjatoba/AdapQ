@@ -18,54 +18,70 @@
  */
 package cat;
 
-import javax.faces.bean.ManagedProperty;
-
-import managedBean.UserLoginMB;
 import util.Constants;
+import dao.QuestionDAO;
+import data.QuestionModel;
+import data.UserModel;
 
 /**
  * 
  * @author victorjatoba
  *
  */
-public class CatEngine {
+public class CatManager {
 
-	@ManagedProperty(value = "#{userLoginMB}")
-	private UserLoginMB userLoginMB;
+	QuestionDAO questionDAO;
 
-	public void start() {
-		if (userLoginMB.isUserLogged()) {
-			if (!haveStudentEnoughInformation()) {
-				this.selectItemByLevel(Constants.ITEM_LEVEL_MEDIUM);
-			} else {
-				this.selectItemByFit();
-			}
-
-			this.showItem();
-
-		} else {
-			// show User not logged Error Message
-		}
+	public CatManager() {
+		super();
+		this.clearFields();
 	}
 
-	public void answer() {
-		boolean userHit = checkAnswer();
-		markItemAsAnswered();
-		updateProficiency();
+	private void clearFields() {
+		questionDAO = new QuestionDAO();
+	}
 
-		if (!finalizationCriteria()) {
-			if (userHit) {
-				selectItemByLevel(Constants.ITEM_LEVEL_HARD);
+	public QuestionModel start(UserModel user) {
+
+		QuestionModel questionStarted = null;
+		if (this.userExist(user)) {
+			if (!haveEnoughInformation(user)) {
+				questionStarted = this.questionDAO.find(new QuestionModel()); // q = this.selectQuestionByLevel(Constants.QUESTION_LEVEL_MEDIUM);
+
 			} else {
-				selectItemByLevel(Constants.ITEM_LEVEL_EASY);
+				questionStarted = this.selectItemByFit();
 			}
 
-			this.showItem();
+		} else {
+			throw new NotAuthenticatedException("USER NOT FOUND");
+		}
+
+		return questionStarted;
+	}
+
+	private boolean userExist(UserModel user) {
+		// TODO Auto-generated method stub
+		return Boolean.TRUE;
+	}
+
+	public QuestionModel nextQuestion(UserModel user, QuestionModel question, boolean answer) {
+		markItemAsAnswered();
+		updateProficiency();
+		QuestionModel nextQuestion = null;
+
+		if (!finalizationCriteria()) {
+			if (answer == Constants.CORRECT_ANSWER) {
+				nextQuestion = this.questionDAO.searchNextMoreHard(question.getDifficulty());
+			} else {
+				nextQuestion = this.questionDAO.find(question);
+			}
+
 		} else {
 			this.finalizeTest();
 			this.showFeedback();
 		}
 
+		return nextQuestion;
 	}
 
 	private void showFeedback() {
@@ -103,27 +119,15 @@ public class CatEngine {
 
 	}
 
-	private void selectItemByFit() {
+	private QuestionModel selectItemByFit() {
 		// TODO Auto-generated method stub
 
+		return this.questionDAO.find(new QuestionModel());
 	}
 
-	private void selectItemByLevel(int itemLevelMedium) {
+	private boolean haveEnoughInformation(UserModel user) {
 		// TODO Auto-generated method stub
-
-	}
-
-	private boolean haveStudentEnoughInformation() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public UserLoginMB getUserLoginMB() {
-		return userLoginMB;
-	}
-
-	public void setUserLoginMB(UserLoginMB userLoginMB) {
-		this.userLoginMB = userLoginMB;
+		return Boolean.TRUE;
 	}
 
 }

@@ -18,14 +18,15 @@
  */
 package managedBean;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
+import util.Constants;
 import util.MessageUtil;
-import util.Util;
+import cat.CatManager;
 import data.OptionModel;
 import data.QuestionModel;
 
@@ -37,96 +38,24 @@ public class ExerciseMB {
 	private QuestionModel actualQuestion;
 	private OptionModel responseOptionModel;
 	private String numberOfOption;
+	private CatManager catManager;
+
+	@ManagedProperty(value = "#{userLoginMB}")
+	private UserLoginMB userLoginMB;
 
 	public ExerciseMB() {
 		this.clearFields();
 	}
 
+	public ExerciseMB(QuestionModel actualQuestion) {
+		super();
+		this.actualQuestion = actualQuestion;
+	}
+
 	private void clearFields() {
 		// this.fillListQuestionFake();
-		this.initFakeQuestion();
-	}
-
-	private void initFakeQuestion() {
-		this.actualQuestion = new QuestionModel();
-		this.actualQuestion.setId(1L);
-		this.actualQuestion
-				.setDescription("Jogar baralho é uma atividade que estimula o raciocínio. Um jogo tradicional é a Paciência, que utiliza 52 cartas. Inicialmente são formadas sete colunas com as cartas. A primeira coluna tem uma carta, a segunda tem duas cartas, a terceira tem três cartas, a quarta tem quatro cartas, e assim sucessivamente até a sétima coluna, a qual tem sete cartas, e o que sobra forma o monte, que são as cartas não utilizadas nas colunas. \nA quantidade de cartas que forma o monte é");
-
-		List<OptionModel> listOptionModel = new ArrayList<OptionModel>();
-
-		OptionModel op = new OptionModel();
-		op.setId(0L);
-		op.setDescription("21");
-		op.setLetterShow(Util.letterOption(0));
-		op.setQuestionModel(this.actualQuestion);
-		listOptionModel.add(op);
-
-		op = new OptionModel();
-		op.setId(1L);
-		op.setDescription("24");
-		op.setLetterShow(Util.letterOption(1));
-		op.setQuestionModel(this.actualQuestion);
-		op.setFlagRight(Boolean.TRUE);
-		listOptionModel.add(op);
-
-		op = new OptionModel();
-		op.setId(2L);
-		op.setDescription("26");
-		op.setLetterShow(Util.letterOption(2));
-		op.setQuestionModel(this.actualQuestion);
-		listOptionModel.add(op);
-
-		op = new OptionModel();
-		op.setId(3L);
-		op.setDescription("28");
-		op.setLetterShow(Util.letterOption(3));
-		op.setQuestionModel(this.actualQuestion);
-		listOptionModel.add(op);
-
-		op = new OptionModel();
-		op.setId(4L);
-		op.setDescription("31");
-		op.setLetterShow(Util.letterOption(4));
-		op.setQuestionModel(this.actualQuestion);
-		listOptionModel.add(op);
-
-		actualQuestion.setListOptionModel(listOptionModel);
-	}
-
-	private void fillListQuestionFake() {
-		this.listQuestionModel = new ArrayList<QuestionModel>();
-
-		for (int i = 0; i < 10; i++) {
-			QuestionModel q = new QuestionModel();
-			q.setDescription("Description from question" + " " + (i + 1));
-			q.setId((long) i);
-
-			List<OptionModel> listOptionModel = makeListOptionModelFakeToQuestion(q);
-
-			q.setListOptionModel(listOptionModel);
-
-			this.listQuestionModel.add(q);
-		}
-	}
-
-	private List<OptionModel> makeListOptionModelFakeToQuestion(QuestionModel questionModel) {
-		List<OptionModel> listOptionModel = new ArrayList<OptionModel>();
-
-		for (int i = 0; i < 5; i++) {
-			OptionModel op = new OptionModel();
-			op.setId((long) i);
-			op.setDescription("Alternative " + (i + 1));
-			op.setLetterShow(Util.letterOption(i));
-			op.setQuestionModel(questionModel);
-
-			if (i == 0) {
-				op.setFlagRight(Boolean.TRUE);
-			}
-
-			listOptionModel.add(op);
-		}
-		return listOptionModel;
+		userLoginMB = new UserLoginMB();
+		this.catManager = new CatManager();
 	}
 
 	public String responseQuestion() {
@@ -140,6 +69,7 @@ public class ExerciseMB {
 				if (optionModel.isFlagRight()) {
 					MessageUtil.addInfoMessage("Parabéns! Você acertou!");
 					// this.exerciseHistoricalModel.setHightAnswear(this.exerciseHistoricalModel.getHightAnswear() + 1);
+					this.actualQuestion = this.catManager.nextQuestion(this.userLoginMB.getUserModel(), this.actualQuestion, Boolean.TRUE);
 				} else {
 					MessageUtil.addErrorMessage("Resposta errada, tente novamente!");
 					// this.exerciseHistoricalModel.setWrongAnswear(this.exerciseHistoricalModel.getWrongAnswear() + 1);
@@ -157,6 +87,11 @@ public class ExerciseMB {
 			// this.exerciseHistoricalDAO.insert(this.exerciseHistoricalModel);
 			// }
 		}
+
+		return Constants.PAGE_EXERCISE;
+	}
+
+	public String Next() {
 
 		return null;
 	}

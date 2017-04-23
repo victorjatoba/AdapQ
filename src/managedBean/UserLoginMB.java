@@ -25,12 +25,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import util.Constants;
+import util.DaoFake;
 import util.FacesUtil;
 import util.MessageUtil;
 import util.Util;
 import util.ValidationUtil;
 import dao.UserDAO;
-import data.ProfileModel;
 import data.UserModel;
 
 @ManagedBean
@@ -38,33 +38,16 @@ import data.UserModel;
 public class UserLoginMB {
 
 	private UserModel userModel;
-	private UserModel userCadastre;
 	private UserDAO userDAO;
 
-	private String passwordConfirm;
-	private boolean editUser;
-	private boolean editImage;
-	private boolean editPassword;
 	private boolean passwordValid;
 
 	public UserLoginMB() {
 		this.clearFields();
-
-		fillFakeLogin();
 	}
 
 	@PostConstruct
 	public void init() {
-		this.fillFakeLogin();
-	}
-
-	private void fillFakeLogin() {
-		this.userModel.setEmail("intelectin@intelectin.com.br");
-		this.userModel.setName("Victor");
-		this.userModel.setLastName("Jatobá");
-		this.userModel.setPassword("123");
-		this.userModel.setId(1L);
-		this.userModel.setProfileModel(new ProfileModel(Constants.PROFILE_STUDENT, "User"));
 	}
 
 	/**
@@ -73,11 +56,9 @@ public class UserLoginMB {
 	 * @author anchieta
 	 */
 	private void clearFields() {
-		this.userModel = new UserModel();
-		this.userCadastre = new UserModel();
 		this.userDAO = new UserDAO();
+		this.userModel = DaoFake.fillFakeLogin(); // TODO
 
-		this.passwordConfirm = "";
 	}
 
 	/**
@@ -168,159 +149,6 @@ public class UserLoginMB {
 		return valid;
 	}
 
-	/**
-	 * Method to check if the password one is equals password confirm.
-	 * 
-	 * @return String
-	 * @author anchieta
-	 */
-	public String checkPassword() {
-
-		this.passwordValid = false;
-
-		if (!ValidationUtil.isNullOrEmpty(this.userCadastre.getPassword()) && !ValidationUtil.isNullOrEmpty(this.passwordConfirm)) {
-
-			if (this.userCadastre.getPassword().length() >= 6) {
-				if (this.userCadastre.getPassword().equals(this.passwordConfirm)) {
-					this.passwordValid = true;
-				} else {
-					MessageUtil.addErrorMessage("form:cadastrePassword_2", "As senhas não conferem.");
-				}
-			} else {
-				MessageUtil.addErrorMessage("form:cadastrePassword_2", "A senha é muito curta!");
-			}
-		}
-
-		return null;
-
-	}
-
-	public String showFieldsEditUser() {
-		this.userCadastre = this.userModel;
-		this.editUser = true;
-		this.editImage = false;
-		this.editPassword = false;
-		return null;
-	}
-
-	public String closedFieldsEditUser() {
-		this.userCadastre = new UserModel();
-		this.editUser = false;
-		this.editPassword = false;
-		return null;
-	}
-
-	public String showFieldsEditPassword() {
-		this.userCadastre = this.userModel;
-		this.editUser = false;
-		this.editImage = false;
-		this.editPassword = true;
-		return null;
-	}
-
-	public String closedFieldsEditPassword() {
-		this.userCadastre = new UserModel();
-		this.editImage = false;
-		this.editUser = false;
-		this.editPassword = false;
-		return null;
-	}
-
-	public String showFieldsEditImageUser() {
-		this.editImage = true;
-		this.editUser = false;
-		this.editPassword = false;
-		return null;
-	}
-
-	public String closedFieldsEditImageUser() {
-		this.editImage = false;
-		this.editUser = false;
-		this.editPassword = false;
-		return null;
-	}
-
-	private boolean validateFields() {
-
-		boolean valid = true;
-
-		if (ValidationUtil.isNullOrEmpty(this.userCadastre.getName())) {
-			MessageUtil.addErrorMessage("form:userCadastreName", "Um valor é necessário.");
-			valid = false;
-		} else {
-			int index = this.userCadastre.getName().indexOf(" ");
-			if (index != -1) {
-				MessageUtil.addErrorMessage("form:userCadastreName", "Informe só o primeiro nome.");
-				valid = false;
-			}
-		}
-
-		if (ValidationUtil.isNullOrEmpty(this.userCadastre.getLastName())) {
-			MessageUtil.addErrorMessage("form:userCadastreLastName", "Um valor é necessário.");
-			valid = false;
-		}
-
-		if (ValidationUtil.isNullOrEmpty(this.userCadastre.getBirthDate())) {
-			MessageUtil.addErrorMessage("form:userBirthDate", "Um valor é necessário.");
-			valid = false;
-		}
-
-		if (ValidationUtil.isNullOrEmpty(this.userCadastre.getEmail())) {
-			MessageUtil.addErrorMessage("form:userCadastreEmail", "Um valor é necessário.");
-			valid = false;
-		}
-
-		if (!this.editUser) {
-
-			// UserModel userTem = this.userDAO.findByEmail(this.userCadastre);
-			UserModel userTem = this.userModel;
-
-			if (!ValidationUtil.isNullOrEmpty(userTem)) {
-				MessageUtil.addErrorMessage("form:userCadastreEmail", "O email já está cadastrado.");
-				valid = false;
-			}
-
-			if (ValidationUtil.isNullOrEmpty(this.userCadastre.getPassword())) {
-				MessageUtil.addErrorMessage("form:cadastrePassword_2", "Um valor é necessário.");
-				valid = false;
-			}
-
-			if (ValidationUtil.isNullOrEmpty(this.passwordConfirm)) {
-				MessageUtil.addErrorMessage("form:cadastrePassword_2", "Um valor é necessário.");
-				valid = false;
-			}
-
-			this.checkPassword();
-
-			if (!this.passwordValid) {
-				valid = false;
-			}
-		}
-
-		return valid;
-	}
-
-	private boolean validateFieldsChangePassword() {
-		boolean valid = true;
-
-		if (ValidationUtil.isNullOrEmpty(this.userCadastre.getOldPassword())) {
-			MessageUtil.addErrorMessage("form:cadastreOldPassword", "Um valor é necessário");
-			valid = false;
-		}
-
-		if (ValidationUtil.isNullOrEmpty(this.userCadastre.getPassword())) {
-			MessageUtil.addErrorMessage("form:cadastrePassword_2", "Um valor é necessário.");
-			valid = false;
-		}
-
-		if (ValidationUtil.isNullOrEmpty(this.passwordConfirm)) {
-			MessageUtil.addErrorMessage("form:cadastrePassword_2", "Um valor é necessário.");
-			valid = false;
-		}
-
-		return valid;
-	}
-
 	public String goForgotPassword() {
 		// ForgotPasswordMB forgotPasswordMB = new ForgotPasswordMB();
 		// ResetPasswordModel resetPasswordModel = new ResetPasswordModel();
@@ -340,52 +168,12 @@ public class UserLoginMB {
 		this.userModel = userModel;
 	}
 
-	public UserModel getUserCadastre() {
-		return userCadastre;
-	}
-
-	public void setUserCadastre(UserModel userCadastre) {
-		this.userCadastre = userCadastre;
-	}
-
-	public String getPasswordConfirm() {
-		return passwordConfirm;
-	}
-
-	public void setPasswordConfirm(String passwordConfirm) {
-		this.passwordConfirm = passwordConfirm;
-	}
-
 	public boolean isPasswordValid() {
 		return passwordValid;
 	}
 
 	public void setPasswordValid(boolean passwordValid) {
 		this.passwordValid = passwordValid;
-	}
-
-	public boolean isEditUser() {
-		return editUser;
-	}
-
-	public void setEditUser(boolean editUser) {
-		this.editUser = editUser;
-	}
-
-	public boolean isEditImage() {
-		return editImage;
-	}
-
-	public void setEditImage(boolean editImage) {
-		this.editImage = editImage;
-	}
-
-	public boolean isEditPassword() {
-		return editPassword;
-	}
-
-	public void setEditPassword(boolean editPassword) {
-		this.editPassword = editPassword;
 	}
 
 }

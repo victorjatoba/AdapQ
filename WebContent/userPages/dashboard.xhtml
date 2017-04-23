@@ -83,16 +83,17 @@
 		<div class="container">
 			<div class="row">
 				<div align="center">
+					<div class="row form-group">
+						<div class="col-xs-12">
+							<p:messages id="messages" showDetail="true" closable="true" />
+						</div>
+					</div>
 					<div class="btn-group" role="group" aria-label="...">
 						<h:commandButton value="Start" id="linkQuestion"
-							title="Questionário" action="#{contextMB.answerQuestionnaire}"
-							styleClass="btn btn-primary btn-lg fa fa-hand-o-down glyphicon glyphicon-list-alt"
-							rendered="#{exerciseMB.actualQuestion != null}">
+							title="Start test" action="#{contextMB.startTest}"
+							styleClass="btn btn-primary btn-lg fa fa-hand-o-down glyphicon glyphicon-list-alt">
 						</h:commandButton>
 
-						<c:if test="#{exerciseMB.actualQuestion == null}">
-							<p class="text-danger">You have no questions available.</p>
-						</c:if>
 					</div>
 				</div>
 

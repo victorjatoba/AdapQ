@@ -53,6 +53,8 @@ public class QuestionModel {
 	// @Column(name = "QUES_FLAG_ACTIVE")
 	private boolean flagActive;
 
+	private double difficulty;
+
 	// @Transient
 	private OptionModel responseOptionModel;
 
@@ -116,6 +118,14 @@ public class QuestionModel {
 	// public void setListImageQuestionModel(List<ImageQuestionModel> listImageQuestionModel) {
 	// this.listImageQuestionModel = listImageQuestionModel;
 	// }
+
+	public double getDifficulty() {
+		return difficulty;
+	}
+
+	public void setDifficulty(double difficulty) {
+		this.difficulty = difficulty;
+	}
 
 	@Override
 	public int hashCode() {

@@ -26,14 +26,17 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
 import util.Constants;
+import util.DaoFake;
 import util.FacesUtil;
-import util.FileUploadUtil;
-import analysis.IrtCalculator;
+import util.MessageUtil;
+import util.ValidationUtil;
+import cat.CatManager;
 
 import com.itemanalysis.psychometrics.irt.estimation.IrtExaminee;
 import com.itemanalysis.psychometrics.irt.model.ItemResponseModel;
 
 import data.ExamineeModel;
+import data.QuestionModel;
 import enums.Page;
 
 @ManagedBean(name = "contextMB")
@@ -45,13 +48,18 @@ public class ContextMB {
 	private List<ExamineeModel> iVecsModel;
 	private List<ItemResponseModel> irms;
 	private int pageChose;
-	private IrtCalculator irtCalculator;
 
 	@ManagedProperty(value = "#{userLoginMB}")
 	private UserLoginMB userLoginMB;
 
 	public ContextMB() {
+		DaoFake.init();
 		this.clearFields();
+	}
+
+	@PostConstruct
+	public void init() {
+		this.actualPage = Page.HOME.getName();
 	}
 
 	/**
@@ -67,51 +75,26 @@ public class ContextMB {
 		this.pageChose = Page.UNKNOWN.getValue();
 	}
 
-	@PostConstruct
-	public void init() {
-		irtCalculator = new IrtCalculator();
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public String thetaEstimationKnownItem() {
-		this.clearFields();
-
-		// Init dataset
-		byte[][] lsat7 = FileUploadUtil.readTestData("lsat7.txt", 32, 5);
-		irtCalculator.mountExamineeList(lsat7);
-		this.irms = irtCalculator.getIrms();
-
-		irtCalculator.runMaximumLikelihood2PL();
-		this.iVecs = irtCalculator.getiVecs();
-
-		this.pageChose = Page.THETA_MLE.getValue();
-		return "";
-	}
-
-	public String jointEstimation() {
-		this.clearFields();
-
-		// this.runJointMleRasch("tap-data.txt");
-		irtCalculator.runJointMleRasch("enem2012.txt");
-		iVecsModel = irtCalculator.getiVecsModel();
-		irms = irtCalculator.getIrms();
-
-		this.pageChose = Page.JOINT_MLE.getValue();
-		return "";
-	}
-
-	public String answerQuestionnaire() {
+	public String startTest() {
 
 		FacesUtil.removeManagedBeanInSession(Constants.EXERCISE_MB);
+		String page = Constants.PAGE_EXERCISE;
 
-		ExerciseMB exerciseMB = new ExerciseMB();
+		CatManager catManager = new CatManager();
+		QuestionModel startedQuestion = catManager.start(this.userLoginMB.getUserModel());
 
-		FacesUtil.setManagedBeanInSession(Constants.EXERCISE_MB, exerciseMB);
+		if (!ValidationUtil.isNullOrEmpty(startedQuestion)) {
+			ExerciseMB exerciseMB = new ExerciseMB();
 
-		return Constants.PAGE_EXERCISE;
+			exerciseMB.setActualQuestion(startedQuestion);
+
+			FacesUtil.setManagedBeanInSession(Constants.EXERCISE_MB, exerciseMB);
+		} else {
+			MessageUtil.addErrorMessage("You have no questions for today.");
+			page = null;
+		}
+
+		return page;
 	}
 
 	/**
@@ -194,14 +177,6 @@ public class ContextMB {
 
 	public void setUserLoginMB(UserLoginMB userLoginMB) {
 		this.userLoginMB = userLoginMB;
-	}
-
-	public IrtCalculator getIrtCalculator() {
-		return irtCalculator;
-	}
-
-	public void setIrtCalculator(IrtCalculator irtCalculator) {
-		this.irtCalculator = irtCalculator;
 	}
 
 }
