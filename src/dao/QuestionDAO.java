@@ -58,6 +58,11 @@ public class QuestionDAO {
 
 	}
 
+	/**
+	 * Search the prox hardest question in relation to difficult passed by param.
+	 * 
+	 * @return the prox hardest question
+	 */
 	public QuestionModel searchNextMoreHard(double difficult) {
 
 		List<QuestionModel> easiests = new ArrayList<QuestionModel>();
@@ -80,6 +85,11 @@ public class QuestionDAO {
 
 	}
 
+	/**
+	 * Search the prox easier question in relation to difficult passed by param.
+	 * 
+	 * @return the prox easier question
+	 */
 	public QuestionModel searchNextMoreEasy(double difficult) {
 
 		List<QuestionModel> easiers = new ArrayList<QuestionModel>();

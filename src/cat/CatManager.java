@@ -41,6 +41,14 @@ public class CatManager {
 		questionDAO = new QuestionDAO();
 	}
 
+	/**
+	 * Method responsible to initialize the CAT process.
+	 * 
+	 * @param user
+	 *            the user logged.
+	 * 
+	 * @return the first question.
+	 */
 	public QuestionModel start(UserModel user) {
 
 		QuestionModel questionStarted = null;
@@ -54,7 +62,7 @@ public class CatManager {
 			}
 
 		} else {
-			throw new NotAuthenticatedException("USER NOT FOUND");
+			// throw new NotAuthenticatedException("USER NOT FOUND");
 		}
 
 		return questionStarted;
