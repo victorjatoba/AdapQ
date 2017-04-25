@@ -45,11 +45,12 @@ public class CatManager {
 
 		QuestionModel questionStarted = null;
 		if (this.userExist(user)) {
-			if (!haveEnoughInformation(user)) {
-				questionStarted = this.questionDAO.find(new QuestionModel()); // q = this.selectQuestionByLevel(Constants.QUESTION_LEVEL_MEDIUM);
+			if (haveEnoughInformation(user)) {
+				questionStarted = this.selectItemByFit();
 
 			} else {
-				questionStarted = this.selectItemByFit();
+				questionStarted = this.questionDAO.searchTheAverageQuestion();
+
 			}
 
 		} else {
@@ -59,6 +60,18 @@ public class CatManager {
 		return questionStarted;
 	}
 
+	/***
+	 * Method responsible to select the next question based on previously student answer
+	 * 
+	 * @param user
+	 *            the student
+	 * @param question
+	 *            the previously question
+	 * @param answer
+	 *            the student response/answer <code>true<code> if answer correctly
+	 *            <code>false<code> Otherwise
+	 * @return
+	 */
 	public QuestionModel nextQuestion(UserModel user, QuestionModel question, boolean answer) {
 		markItemAsAnswered();
 		updateProficiency();
@@ -122,12 +135,12 @@ public class CatManager {
 	private QuestionModel selectItemByFit() {
 		// TODO Auto-generated method stub
 
-		return this.questionDAO.find(new QuestionModel());
+		return null;
 	}
 
 	private boolean haveEnoughInformation(UserModel user) {
 		// TODO Auto-generated method stub
-		return Boolean.TRUE;
+		return false;
 	}
 
 }

@@ -12,11 +12,13 @@
 
 # Steps to configure:
   1. Install JDK 1.7 (http://askubuntu.com/questions/761127/how-do-i-install-openjdk-7-on-ubuntu-16-04-or-higher)
-      sudo add-apt-repository ppa:openjdk-r/ppa
-      sudo apt-get update
-      sudo apt-get install openjdk-7-jdk
+	sudo add-apt-repository ppa:openjdk-r/ppa
+	sudo apt-get update
+	sudo apt-get install openjdk-7-jdk
   2. Download and Install Eclipse Luna
-  3. Import project by egit plugin
+  3. Clone with git
+  	git clone https://github.com/victorjatoba/AdapQ.git
+  4. Import with a Maven project
 
 # Important things
   - How to add jMetrik jar within eclipse project

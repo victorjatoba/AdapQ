@@ -7,9 +7,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
+import data.QuestionModel;
 import data.UserModel;
 
 public class Util {
@@ -182,6 +186,49 @@ public class Util {
 
 		return letter;
 
+	}
+
+	/**
+	 * Sort a list of questions from easier to hardest.
+	 * 
+	 * @param questions
+	 * @return
+	 */
+	public static List<QuestionModel> sortQuestionListFromEasierToHardest(List<QuestionModel> questions) {
+
+		Collections.sort(questions, new Comparator<QuestionModel>() {
+			@Override
+			public int compare(QuestionModel q1, QuestionModel q2) {
+				if (q1.getDifficulty() > q2.getDifficulty())
+					return 1;
+				if (q1.getDifficulty() < q2.getDifficulty())
+					return -1;
+				return 0;
+			}
+		});
+
+		return questions;
+	}
+
+	/**
+	 * Sort a list of questions from hardest to easiest.
+	 * 
+	 * @param questions
+	 * @return
+	 */
+	public static List<QuestionModel> sortQuestionListFromHardestToEasier(List<QuestionModel> questions) {
+		Collections.sort(questions, new Comparator<QuestionModel>() {
+			@Override
+			public int compare(QuestionModel q1, QuestionModel q2) {
+				if (q1.getDifficulty() < q2.getDifficulty())
+					return 1;
+				if (q1.getDifficulty() > q2.getDifficulty())
+					return -1;
+				return 0;
+			}
+		});
+
+		return questions;
 	}
 
 }

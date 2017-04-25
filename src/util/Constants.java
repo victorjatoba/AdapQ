@@ -59,4 +59,6 @@ public class Constants {
 
 	public static final boolean CORRECT_ANSWER = true;
 	public static final boolean WRONG_ANSWER = false;
+
+	public static final double AVERAGE_DIFFICULTY_LEVEL_ENEM_2012 = (0.169051908151077 + 0.001);
 }

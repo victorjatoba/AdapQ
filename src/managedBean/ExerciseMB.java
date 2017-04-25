@@ -59,6 +59,11 @@ public class ExerciseMB {
 		this.catManager = new CatManager();
 	}
 
+	/***
+	 * Method called after responser answer the actual question
+	 * 
+	 * @return
+	 */
 	public String answerQuestion() {
 
 		boolean checked = false;
@@ -81,12 +86,6 @@ public class ExerciseMB {
 			MessageUtil.addErrorMessage("É necessário escolher uma opção.");
 		} else {
 			this.nextQuestion = this.catManager.nextQuestion(this.userLoginMB.getUserModel(), this.actualQuestion, userAnswerCorrectly);
-
-			// if (!ValidationUtil.isNullOrEmpty(this.exerciseHistoricalModel.getId())) {
-			// this.exerciseHistoricalDAO.update(this.exerciseHistoricalModel);
-			// } else {
-			// this.exerciseHistoricalDAO.insert(this.exerciseHistoricalModel);
-			// }
 		}
 
 		return null;
