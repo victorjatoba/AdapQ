@@ -65,20 +65,20 @@ public class QuestionDAO {
 	 */
 	public QuestionModel searchNextMoreHard(double difficult) {
 
-		List<QuestionModel> easiests = new ArrayList<QuestionModel>();
+		List<QuestionModel> hardest = new ArrayList<QuestionModel>();
 		for (QuestionModel question : DaoFake.getQuestions()) {
 			if (question.getDifficulty() > difficult) {
-				easiests.add(question);
+				hardest.add(question);
 			}
 		}
 
 		// sort questions
-		easiests = Util.sortQuestionListFromEasierToHardest(easiests);
+		hardest = Util.sortQuestionListFromEasierToHardest(hardest);
 
 		QuestionModel nextMoreHard = null;
 		// get first from sorted questions
-		if (!ValidationUtil.isNullOrEmpty(easiests)) {
-			nextMoreHard = easiests.get(0);
+		if (!ValidationUtil.isNullOrEmpty(hardest)) {
+			nextMoreHard = hardest.get(0);
 		}
 
 		return nextMoreHard;

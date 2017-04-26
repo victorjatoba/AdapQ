@@ -1,3 +1,21 @@
+/*
+ * Copyright 2017 V. M. G. Jatobá
+ *
+ * Licensed under the MIT;
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * The software is provided "AS IS", without warranty of any kind, 
+ * express or implied, including but not limited to the warranties
+ * of merchantability, fitness for a particular purpose and
+ * noninfringement. In no event shall the authors or copyright
+ * holders be liable for any claim, damages or other liability,
+ * whether in an action of contract, tort or otherwise, arising
+ * from, out of or in connection with the software or the use
+ * or other dealings in the software.
+ */
 package util;
 
 import javax.faces.context.FacesContext;
@@ -57,8 +75,6 @@ public class Constants {
 	public static final int QUESTION_LEVEL_MEDIUM = 1;
 	public static final int ITEM_LEVEL_HARD = 2;
 
-	public static final boolean CORRECT_ANSWER = true;
-	public static final boolean WRONG_ANSWER = false;
-
 	public static final double AVERAGE_DIFFICULTY_LEVEL_ENEM_2012 = (0.169051908151077 + 0.001);
+	public static final double AVERAGE_THETA_LEVEL = 0.0;
 }

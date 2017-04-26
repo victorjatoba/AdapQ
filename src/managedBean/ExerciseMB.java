@@ -27,6 +27,7 @@ import javax.faces.bean.SessionScoped;
 import util.Constants;
 import util.MessageUtil;
 import cat.CatManager;
+import cat.NotAuthenticatedException;
 import data.OptionModel;
 import data.QuestionModel;
 
@@ -82,10 +83,15 @@ public class ExerciseMB {
 			}
 		}
 
-		if (!checked) {
-			MessageUtil.addErrorMessage("É necessário escolher uma opção.");
+		if (checked) {
+			try {
+				this.nextQuestion = this.catManager.nextQuestion(this.userLoginMB.getUserModel(), this.actualQuestion, userAnswerCorrectly);
+			} catch (NotAuthenticatedException e) {
+				MessageUtil.addErrorMessage("You need to be logged.");
+				e.printStackTrace();
+			}
 		} else {
-			this.nextQuestion = this.catManager.nextQuestion(this.userLoginMB.getUserModel(), this.actualQuestion, userAnswerCorrectly);
+			MessageUtil.addErrorMessage("É necessário escolher uma opção.");
 		}
 
 		return null;

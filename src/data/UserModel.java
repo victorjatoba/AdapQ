@@ -52,6 +52,8 @@ public class UserModel {
 	// @Column(name = "USER_ID")
 	private Long id;
 
+	private double theta;
+
 	// @Column(name = "USER_NAME")
 	private String name;
 
@@ -238,6 +240,14 @@ public class UserModel {
 
 	public void setRegistered(boolean registered) {
 		this.registered = registered;
+	}
+
+	public double getTheta() {
+		return theta;
+	}
+
+	public void setTheta(double theta) {
+		this.theta = theta;
 	}
 
 }

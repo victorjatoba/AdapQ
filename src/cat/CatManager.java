@@ -48,21 +48,22 @@ public class CatManager {
 	 *            the user logged.
 	 * 
 	 * @return the first question.
+	 * @throws NotAuthenticatedException
 	 */
-	public QuestionModel start(UserModel user) {
+	public QuestionModel start(UserModel user) throws NotAuthenticatedException {
 
 		QuestionModel questionStarted = null;
 		if (this.userExist(user)) {
-			if (haveEnoughInformation(user)) {
-				questionStarted = this.selectItemByFit();
-
-			} else {
-				questionStarted = this.questionDAO.searchTheAverageQuestion();
-
+			if (!haveEnoughInformation(user)) {
+				user.setTheta(Constants.AVERAGE_THETA_LEVEL);
 			}
+			// else {
+			// questionStarted = this.questionDAO.searchTheAverageQuestion();
+			// }
+			questionStarted = this.selectFittestItem();
 
 		} else {
-			// throw new NotAuthenticatedException("USER NOT FOUND");
+			throw new NotAuthenticatedException("USER NOT FOUND");
 		}
 
 		return questionStarted;
@@ -79,29 +80,35 @@ public class CatManager {
 	 *            the student response/answer <code>true<code> if answer correctly
 	 *            <code>false<code> Otherwise
 	 * @return
+	 * @throws NotAuthenticatedException
 	 */
-	public QuestionModel nextQuestion(UserModel user, QuestionModel question, boolean answer) {
-		markItemAsAnswered();
-		updateProficiency();
+	public QuestionModel nextQuestion(UserModel user, QuestionModel question, boolean answer) throws NotAuthenticatedException {
 		QuestionModel nextQuestion = null;
 
-		if (!finalizationCriteria()) {
-			if (answer == Constants.CORRECT_ANSWER) {
-				nextQuestion = this.questionDAO.searchNextMoreHard(question.getDifficulty());
+		if (this.userExist(user)) {
+			markItemAsAnswered();
+			if (!finalizationCriteria()) {
+				this.updateProficiency(user, answer);
+				if (isCorrect(answer)) {
+					nextQuestion = this.questionDAO.searchNextMoreHard(question.getDifficulty());
+
+				} else {
+					nextQuestion = this.questionDAO.searchNextMoreEasy(question.getDifficulty());
+				}
+
 			} else {
-				nextQuestion = this.questionDAO.searchNextMoreEasy(question.getDifficulty());
+				this.finalizeTest();
+				this.showFeedback();
 			}
 
 		} else {
-			this.finalizeTest();
-			this.showFeedback();
+			throw new NotAuthenticatedException("USER NOT FOUND");
 		}
 
 		return nextQuestion;
 	}
 
 	private boolean userExist(UserModel user) {
-		// TODO Auto-generated method stub
 		return Boolean.TRUE;
 	}
 
@@ -115,7 +122,7 @@ public class CatManager {
 
 	}
 
-	private void updateProficiency() {
+	private void updateProficiency(UserModel user, boolean answer) {
 		// TODO Auto-generated method stub
 
 	}
@@ -125,9 +132,8 @@ public class CatManager {
 
 	}
 
-	private boolean checkAnswer() {
-		// TODO Auto-generated method stub
-		return false;
+	private boolean isCorrect(boolean answer) {
+		return answer == Boolean.TRUE;
 	}
 
 	private boolean finalizationCriteria() {
@@ -135,15 +141,13 @@ public class CatManager {
 		return false;
 	}
 
-	private void showItem() {
-		// TODO Auto-generated method stub
-
-	}
-
-	private QuestionModel selectItemByFit() {
-		// TODO Auto-generated method stub
-
-		return null;
+	/**
+	 * Select the most appropriate question based on user ability.
+	 * 
+	 * @return the most appropriate question
+	 */
+	private QuestionModel selectFittestItem() {
+		return this.questionDAO.searchTheAverageQuestion();
 	}
 
 	private boolean haveEnoughInformation(UserModel user) {

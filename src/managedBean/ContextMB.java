@@ -31,6 +31,7 @@ import util.FacesUtil;
 import util.MessageUtil;
 import util.ValidationUtil;
 import cat.CatManager;
+import cat.NotAuthenticatedException;
 
 import com.itemanalysis.psychometrics.irt.estimation.IrtExaminee;
 import com.itemanalysis.psychometrics.irt.model.ItemResponseModel;
@@ -81,7 +82,14 @@ public class ContextMB {
 		String page = Constants.PAGE_EXERCISE;
 
 		CatManager catManager = new CatManager();
-		QuestionModel startedQuestion = catManager.start(this.userLoginMB.getUserModel());
+		QuestionModel startedQuestion = null;
+
+		try {
+			startedQuestion = catManager.start(this.userLoginMB.getUserModel());
+		} catch (NotAuthenticatedException e) {
+			MessageUtil.addErrorMessage("You have no questions for today.");
+			e.printStackTrace();
+		}
 
 		if (!ValidationUtil.isNullOrEmpty(startedQuestion)) {
 			ExerciseMB exerciseMB = new ExerciseMB();
