@@ -18,7 +18,6 @@
  */
 package managedBean;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -27,7 +26,6 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
 import util.Constants;
-import util.DaoFake;
 import util.FacesUtil;
 import util.MessageUtil;
 import util.ValidationUtil;
@@ -39,6 +37,7 @@ import com.itemanalysis.psychometrics.irt.model.ItemResponseModel;
 
 import data.ExamineeModel;
 import data.QuestionModel;
+import data.UserModel;
 import enums.Page;
 
 @ManagedBean(name = "contextMB")
@@ -55,7 +54,7 @@ public class ContextMB {
 	private UserLoginMB userLoginMB;
 
 	public ContextMB() {
-		DaoFake.init();
+		// DaoFake.init();
 		this.clearFields();
 	}
 
@@ -82,25 +81,29 @@ public class ContextMB {
 		FacesUtil.removeManagedBeanInSession(Constants.EXERCISE_MB);
 		String page = Constants.PAGE_EXERCISE;
 
-		CatManager catManager = new CatManager();
+		UserModel userModel = this.userLoginMB.getUserModel();
+		CatManager catManager = new CatManager(userModel);
 		QuestionModel startedQuestion = null;
 
 		try {
-			ArrayList<ItemResponseModel> irms = new ArrayList<ItemResponseModel>();
-			irms.addAll(DaoFake.getIrms());
-			IrtExaminee irtExaminee = new IrtExaminee(irms);
-			startedQuestion = catManager.start(irtExaminee);
+			// ArrayList<ItemResponseModel> irms = new ArrayList<ItemResponseModel>();
+			// irms.addAll(DaoFake.getIrms());
+
+			// IrtExaminee irtExaminee = new IrtExaminee(userModel.getItemAnswered());
+			// irtExaminee.setStartValue(this.userLoginMB.getUserModel().getTheta());
+			startedQuestion = catManager.start();
+
 		} catch (NotAuthenticatedException e) {
-			MessageUtil.addErrorMessage("You have no questions for today.");
+			MessageUtil.addErrorMessage("You need to be logged.");
 			e.printStackTrace();
 		}
 
 		if (!ValidationUtil.isNullOrEmpty(startedQuestion)) {
 			ExerciseMB exerciseMB = new ExerciseMB();
-
 			exerciseMB.setActualQuestion(startedQuestion);
 
 			FacesUtil.setManagedBeanInSession(Constants.EXERCISE_MB, exerciseMB);
+
 		} else {
 			MessageUtil.addErrorMessage("You have no questions for today.");
 			page = null;

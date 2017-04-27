@@ -18,6 +18,8 @@
  */
 package cat;
 
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 
 import util.Constants;
@@ -28,7 +30,10 @@ import com.itemanalysis.psychometrics.irt.estimation.IrtExaminee;
 import com.itemanalysis.psychometrics.irt.model.ItemResponseModel;
 
 import dao.QuestionDAO;
+import dao.UserQuestionDAO;
 import data.QuestionModel;
+import data.UserModel;
+import data.UserQuestionModel;
 
 /**
  * 
@@ -38,39 +43,42 @@ import data.QuestionModel;
 public class CatManager {
 
 	QuestionDAO questionDAO;
+	UserQuestionDAO userQuestionDAO;
+	UserModel user;
 
-	public CatManager() {
+	public CatManager(UserModel userModel) {
 		super();
+		this.user = userModel;
 		this.clearFields();
 	}
 
 	private void clearFields() {
 		questionDAO = new QuestionDAO();
+		userQuestionDAO = new UserQuestionDAO(new ArrayList<UserQuestionModel>());
 	}
 
 	/**
 	 * Method responsible to initialize the CAT process.
 	 * 
-	 * @param irtExaminee
+	 * @param user
 	 *            the user logged.
 	 * 
 	 * @return the first question.
 	 * @throws NotAuthenticatedException
 	 */
-	public QuestionModel start(IrtExaminee irtExaminee) throws NotAuthenticatedException {
-
+	public QuestionModel start() throws NotAuthenticatedException {
 		QuestionModel questionStarted = null;
 
-		if (this.userExist(irtExaminee)) {
-			if (!haveEnoughInformation(irtExaminee)) {
-				irtExaminee.setStartValue(Constants.AVERAGE_THETA_LEVEL);
-			}
-
-			questionStarted = this.selectQuestionMostInformative(irtExaminee, DaoFake.getIrms());
-
-		} else {
-			throw new NotAuthenticatedException("USER NOT FOUND");
+		// if (userExist(userModel)) {
+		if (!haveEnoughInformation(this.user)) {
+			this.user.getIrtExaminee().setStartValue(Constants.AVERAGE_THETA_LEVEL);
 		}
+
+		questionStarted = selectQuestionMostInformative(DaoFake.getIrms());
+
+		// } else {
+		// throw new NotAuthenticatedException("USER NOT FOUND");
+		// }
 
 		return questionStarted;
 	}
@@ -88,40 +96,42 @@ public class CatManager {
 	 * @return
 	 * @throws NotAuthenticatedException
 	 */
-	public QuestionModel nextQuestion(IrtExaminee irtExaminee, QuestionModel question, boolean answer) throws NotAuthenticatedException {
+	public QuestionModel nextQuestion(QuestionModel question, boolean answer) throws NotAuthenticatedException {
 		QuestionModel nextQuestion = null;
 
-		if (this.userExist(irtExaminee)) {
-			markItemAsAnswered();
-			if (!finalizationCriteria()) {
-				this.updateProficiency(irtExaminee, answer);
-				List<ItemResponseModel> questions = null;
+		// if (this.userExist(this.userModel)) {
+		this.markItemAsAnswered(question, answer);
+		if (!finalizationCriteria()) {
+			this.updateProficiency(answer);
+			List<ItemResponseModel> questions = null;
 
-				if (isCorrect(answer)) {
-					// nextQuestion = this.questionDAO.searchNextMoreHard(question.getDifficulty());
-					questions = this.questionDAO.searchQuestionsMoreHard(question.getDifficulty());
-
-				} else {
-					// nextQuestion = this.questionDAO.searchNextMoreEasy(question.getDifficulty());
-					questions = this.questionDAO.searchQuestionsMoreEasy(question.getDifficulty());
-
-				}
-
-				nextQuestion = this.selectQuestionMostInformative(irtExaminee, questions);
+			if (isCorrect(answer)) {
+				// nextQuestion = this.questionDAO.searchNextMoreHard(question.getDifficulty());
+				questions = this.questionDAO.searchQuestionsMoreHard(question.getDifficulty());
 
 			} else {
-				this.finalizeTest();
-				this.showFeedback();
+				// nextQuestion = this.questionDAO.searchNextMoreEasy(question.getDifficulty());
+				questions = this.questionDAO.searchQuestionsMoreEasy(question.getDifficulty());
+
+			}
+
+			if (questions.size() != 0) {
+				nextQuestion = this.selectQuestionMostInformative(questions);
 			}
 
 		} else {
-			throw new NotAuthenticatedException("USER NOT FOUND");
+			this.finalizeTest();
+			this.showFeedback();
 		}
+
+		// } else {
+		// throw new NotAuthenticatedException("USER NOT FOUND");
+		// }
 
 		return nextQuestion;
 	}
 
-	private boolean userExist(IrtExaminee irtExaminee) {
+	private boolean userExist(UserModel userModel2) {
 		return Boolean.TRUE;
 	}
 
@@ -135,14 +145,25 @@ public class CatManager {
 
 	}
 
-	private void updateProficiency(IrtExaminee irtExaminee, boolean answer) {
-		// TODO Auto-generated method stub
+	private void updateProficiency(boolean answer) {
+		// TODO fill examinee with questions answered
+		IrtExaminee examinee = this.user.getIrtExaminee();
+		List<UserQuestionModel> userQuestionModels = this.userQuestionDAO.getUserQuestionModels();
+		byte[] responses = new byte[userQuestionModels.size()];
 
+		int i = 0;
+		for (UserQuestionModel userQuestionModel : userQuestionModels) {
+			responses[i++] = (userQuestionModel.getAnswer() == Boolean.TRUE) ? (byte) 1 : (byte) 0;
+		}
+
+		examinee.setResponseVector(responses);
+		examinee.maximumLikelihoodEstimate(Constants.thetaMin, Constants.thetaMax);
 	}
 
-	private void markItemAsAnswered() {
-		// TODO Auto-generated method stub
+	private void markItemAsAnswered(QuestionModel question, boolean answer) {
 
+		UserQuestionModel userQuestionModel = new UserQuestionModel(this.user, question, answer, new Time(0));
+		this.userQuestionDAO.insert(userQuestionModel);
 	}
 
 	private boolean isCorrect(boolean answer) {
@@ -161,11 +182,12 @@ public class CatManager {
 	 * 
 	 * @return the most appropriate question
 	 */
-	private QuestionModel selectQuestionMostInformative(IrtExaminee irtExaminee, List<ItemResponseModel> irms) {
+	private QuestionModel selectQuestionMostInformative(List<ItemResponseModel> irms) {
 		QuestionModel questionModelMoreInformative = null;
 
 		if (!ValidationUtil.isNullOrEmpty(irms)) {
 			ItemResponseModel irmMostInformative = irms.get(0); // get first
+			IrtExaminee irtExaminee = this.user.getIrtExaminee();
 			double iifBigger = irmMostInformative.itemInformationAt(irtExaminee.getTheta());
 
 			for (int i = 1; i < irms.size(); i++) {
@@ -182,9 +204,8 @@ public class CatManager {
 		return questionModelMoreInformative;
 	}
 
-	private boolean haveEnoughInformation(IrtExaminee irtExaminee) {
-		// TODO Auto-generated method stub
-		return false;
+	private boolean haveEnoughInformation(UserModel userModel) {
+		return userModel.getIrtExaminee().getTheta() != 0.0;
 	}
 	//
 	// private void iif(UserModel user, QuestionModel question) {

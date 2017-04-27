@@ -36,6 +36,7 @@ import data.ExamineeModel;
 public class IrtCalculator {
 
 	private List<ItemResponseModel> irms;
+	private ItemResponseModel[] irmsArray;
 	private ArrayList<ExamineeModel> iVecsModel;
 	private List<IrtExaminee> iVecs;
 
@@ -72,7 +73,7 @@ public class IrtCalculator {
 	 */
 	public void runJointMleRasch(String dataName) {
 		// byte[][] data = FileUploadUtil.readTestData(dataName, 35, 18);
-		byte[][] data = FileUploadUtil.readTestData(dataName, 1414, 175);
+		byte[][] data = FileUploadUtil.readTestData(dataName, Constants.NUM_RESPONSERS_ENEM_2012, Constants.NUM_ITEM_ENEM_2012);
 		int nItems = data[0].length;
 		int nPeople = data.length;
 
@@ -93,6 +94,7 @@ public class IrtCalculator {
 
 		double[] theta = jmle.getPersonEstimates();
 		this.irms = Arrays.asList(jmle.getItems());
+		this.irmsArray = jmle.getItems();
 
 		this.iVecsModel = new ArrayList<ExamineeModel>();
 		for (int j = 0; j < nPeople; j++) {
@@ -113,7 +115,7 @@ public class IrtCalculator {
 		int n = Constants.aParamLSAT7.length;
 		int nPeople = dataSet.length;
 
-		ItemResponseModel[] irmArray = new ItemResponseModel[n];
+		ItemResponseModel[] irmsArray = new ItemResponseModel[n];
 		irms = new ArrayList<ItemResponseModel>();
 
 		// create item response models objects
@@ -124,14 +126,15 @@ public class IrtCalculator {
 			Irm3PL irm = new Irm3PL(Constants.aParamLSAT7[i], Constants.bParamLSAT7[i], 1.702);
 			irm.setName(iName);
 
-			irmArray[i] = irm;
+			irmsArray[i] = irm;
 		}
 
-		this.irms = Arrays.asList(irmArray);
+		this.irms = Arrays.asList(irmsArray);
+		this.irmsArray = irmsArray;
 		List<IrtExaminee> iVecs = new ArrayList<IrtExaminee>();
 
 		for (int j = 0; j < nPeople; j++) {
-			IrtExaminee iVec = new IrtExaminee(irmArray);
+			IrtExaminee iVec = new IrtExaminee(irmsArray);
 			iVec.setResponseVector(dataSet[j]);
 			iVecs.add(iVec);
 		}
@@ -148,7 +151,7 @@ public class IrtCalculator {
 		double mle = 0.0;
 
 		for (IrtExaminee irtExaminee : this.iVecs) {
-			mle = irtExaminee.maximumLikelihoodEstimate(Constants.minTheta, Constants.maxTheta);
+			mle = irtExaminee.maximumLikelihoodEstimate(Constants.thetaMin, Constants.thetaMax);
 			irtExaminee.mleStandardErrorAt(mle);
 		}
 
@@ -176,6 +179,14 @@ public class IrtCalculator {
 
 	public void setiVecs(List<IrtExaminee> iVecs) {
 		this.iVecs = iVecs;
+	}
+
+	public ItemResponseModel[] getIrmsArray() {
+		return irmsArray;
+	}
+
+	public void setIrmsArray(ItemResponseModel[] irmsArray) {
+		this.irmsArray = irmsArray;
 	}
 
 }

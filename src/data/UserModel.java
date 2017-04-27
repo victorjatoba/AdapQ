@@ -25,6 +25,8 @@ import util.Constants;
 import util.Util;
 import util.ValidationUtil;
 
+import com.itemanalysis.psychometrics.irt.estimation.IrtExaminee;
+
 /**
  * Entity Studenty
  * 
@@ -51,8 +53,6 @@ public class UserModel {
 	// @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TB_USER_ID_SEQ")
 	// @Column(name = "USER_ID")
 	private Long id;
-
-	private double theta;
 
 	// @Column(name = "USER_NAME")
 	private String name;
@@ -96,7 +96,10 @@ public class UserModel {
 	// @Transient
 	private AvatarModel avatarModel;
 
-	public UserModel() {
+	private IrtExaminee irtExaminee;
+
+	public UserModel(IrtExaminee irtExaminee) {
+		this.irtExaminee = irtExaminee;
 	}
 
 	public UserModel(final Long id) {
@@ -242,12 +245,12 @@ public class UserModel {
 		this.registered = registered;
 	}
 
-	public double getTheta() {
-		return theta;
+	public IrtExaminee getIrtExaminee() {
+		return irtExaminee;
 	}
 
-	public void setTheta(double theta) {
-		this.theta = theta;
+	public void setIrtExaminee(IrtExaminee irtExaminee) {
+		this.irtExaminee = irtExaminee;
 	}
 
 }

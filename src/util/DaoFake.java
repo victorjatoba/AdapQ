@@ -43,6 +43,7 @@ public class DaoFake {
 	private static List<QuestionModel> questions;
 	private static List<ItemResponseModel> irms;
 	private static UserModel user;
+	private static ItemResponseModel[] irmsArray;
 
 	public static void init() {
 		questions = getEnem2012Questions();
@@ -115,12 +116,16 @@ public class DaoFake {
 		irtCalculator.runJointMleRasch("enem2012.txt");
 		ArrayList<ExamineeModel> examineeModels = irtCalculator.getiVecsModel();
 		List<ItemResponseModel> irms = irtCalculator.getIrms();
+		DaoFake.irmsArray = irtCalculator.getIrmsArray();
 
 		return irms;
 	}
 
 	public static UserModel fillFakeLogin() {
-		user = new UserModel();
+
+		IrtExaminee irtExaminee = new IrtExaminee(DaoFake.irmsArray);
+
+		user = new UserModel(irtExaminee);
 
 		user.setEmail("intelectin@intelectin.com.br");
 		user.setName("Victor");

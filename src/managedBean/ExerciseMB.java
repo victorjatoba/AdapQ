@@ -18,7 +18,6 @@
  */
 package managedBean;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -26,14 +25,10 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
 import util.Constants;
-import util.DaoFake;
 import util.MessageUtil;
+import util.ValidationUtil;
 import cat.CatManager;
 import cat.NotAuthenticatedException;
-
-import com.itemanalysis.psychometrics.irt.estimation.IrtExaminee;
-import com.itemanalysis.psychometrics.irt.model.ItemResponseModel;
-
 import data.OptionModel;
 import data.QuestionModel;
 
@@ -63,7 +58,7 @@ public class ExerciseMB {
 	private void clearFields() {
 		// this.fillListQuestionFake();
 		userLoginMB = new UserLoginMB();
-		this.catManager = new CatManager();
+		this.catManager = new CatManager(userLoginMB.getUserModel());
 	}
 
 	/***
@@ -91,16 +86,17 @@ public class ExerciseMB {
 
 		if (checked) {
 			try {
-				ArrayList<ItemResponseModel> irms = new ArrayList<ItemResponseModel>();
-				irms.addAll(DaoFake.getIrms());
-				IrtExaminee irtExaminee = new IrtExaminee(irms);
-				this.nextQuestion = this.catManager.nextQuestion(irtExaminee, this.actualQuestion, userAnswerCorrectly);
+				this.nextQuestion = this.catManager.nextQuestion(this.actualQuestion, userAnswerCorrectly);
+				if (ValidationUtil.isNullOrEmpty(this.nextQuestion)) {
+					MessageUtil.addErrorMessage("You have no questions available.");
+				}
+
 			} catch (NotAuthenticatedException e) {
 				MessageUtil.addErrorMessage("You need to be logged.");
 				e.printStackTrace();
 			}
 		} else {
-			MessageUtil.addErrorMessage("É necessário escolher uma opção.");
+			MessageUtil.addErrorMessage("You need to select an option.");
 		}
 
 		return null;

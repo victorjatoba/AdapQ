@@ -18,9 +18,8 @@
  */
 package dao;
 
-import util.Constants;
+import util.DaoFake;
 import util.ValidationUtil;
-import data.ProfileModel;
 import data.UserModel;
 
 public class UserDAO {
@@ -33,19 +32,18 @@ public class UserDAO {
 				|| ValidationUtil.isNullOrEmpty(userModel.getPassword()) || !userModel.getPassword().equals("123")) {
 			userModel = null;
 		} else {
-			userModel = this.fillFakeLogin(userModel);
+			userModel = DaoFake.getUser();
 		}
 
 		return userModel;
 
 	}
-
-	private UserModel fillFakeLogin(UserModel userModel) {
-		userModel.setName("Victor");
-		userModel.setLastName("Jatobá");
-		userModel.setId(1L);
-		userModel.setProfileModel(new ProfileModel(Constants.PROFILE_STUDENT, "User"));
-
-		return userModel;
-	}
+	// private UserModel fillFakeLogin(UserModel userModel) {
+	// userModel.setName("Victor");
+	// userModel.setLastName("Jatobá");
+	// userModel.setId(1L);
+	// userModel.setProfileModel(new ProfileModel(Constants.PROFILE_STUDENT, "User"));
+	//
+	// return userModel;
+	// }
 }

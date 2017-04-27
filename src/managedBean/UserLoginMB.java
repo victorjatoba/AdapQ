@@ -56,8 +56,10 @@ public class UserLoginMB {
 	 * @author anchieta
 	 */
 	private void clearFields() {
+		// FIRST METHOD CALLED BY THE SYSTEM
 		this.userDAO = new UserDAO();
-		this.userModel = DaoFake.fillFakeLogin(); // TODO
+		DaoFake.init();
+		this.userModel = DaoFake.getUser(); // TODO
 
 	}
 
