@@ -18,6 +18,7 @@
  */
 package managedBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -25,9 +26,14 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
 import util.Constants;
+import util.DaoFake;
 import util.MessageUtil;
 import cat.CatManager;
 import cat.NotAuthenticatedException;
+
+import com.itemanalysis.psychometrics.irt.estimation.IrtExaminee;
+import com.itemanalysis.psychometrics.irt.model.ItemResponseModel;
+
 import data.OptionModel;
 import data.QuestionModel;
 
@@ -85,7 +91,10 @@ public class ExerciseMB {
 
 		if (checked) {
 			try {
-				this.nextQuestion = this.catManager.nextQuestion(this.userLoginMB.getUserModel(), this.actualQuestion, userAnswerCorrectly);
+				ArrayList<ItemResponseModel> irms = new ArrayList<ItemResponseModel>();
+				irms.addAll(DaoFake.getIrms());
+				IrtExaminee irtExaminee = new IrtExaminee(irms);
+				this.nextQuestion = this.catManager.nextQuestion(irtExaminee, this.actualQuestion, userAnswerCorrectly);
 			} catch (NotAuthenticatedException e) {
 				MessageUtil.addErrorMessage("You need to be logged.");
 				e.printStackTrace();

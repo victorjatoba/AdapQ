@@ -18,10 +18,17 @@
  */
 package cat;
 
+import java.util.List;
+
 import util.Constants;
+import util.DaoFake;
+import util.ValidationUtil;
+
+import com.itemanalysis.psychometrics.irt.estimation.IrtExaminee;
+import com.itemanalysis.psychometrics.irt.model.ItemResponseModel;
+
 import dao.QuestionDAO;
 import data.QuestionModel;
-import data.UserModel;
 
 /**
  * 
@@ -44,23 +51,22 @@ public class CatManager {
 	/**
 	 * Method responsible to initialize the CAT process.
 	 * 
-	 * @param user
+	 * @param irtExaminee
 	 *            the user logged.
 	 * 
 	 * @return the first question.
 	 * @throws NotAuthenticatedException
 	 */
-	public QuestionModel start(UserModel user) throws NotAuthenticatedException {
+	public QuestionModel start(IrtExaminee irtExaminee) throws NotAuthenticatedException {
 
 		QuestionModel questionStarted = null;
-		if (this.userExist(user)) {
-			if (!haveEnoughInformation(user)) {
-				user.setTheta(Constants.AVERAGE_THETA_LEVEL);
+
+		if (this.userExist(irtExaminee)) {
+			if (!haveEnoughInformation(irtExaminee)) {
+				irtExaminee.setStartValue(Constants.AVERAGE_THETA_LEVEL);
 			}
-			// else {
-			// questionStarted = this.questionDAO.searchTheAverageQuestion();
-			// }
-			questionStarted = this.selectFittestItem();
+
+			questionStarted = this.selectQuestionMostInformative(irtExaminee, DaoFake.getIrms());
 
 		} else {
 			throw new NotAuthenticatedException("USER NOT FOUND");
@@ -82,19 +88,26 @@ public class CatManager {
 	 * @return
 	 * @throws NotAuthenticatedException
 	 */
-	public QuestionModel nextQuestion(UserModel user, QuestionModel question, boolean answer) throws NotAuthenticatedException {
+	public QuestionModel nextQuestion(IrtExaminee irtExaminee, QuestionModel question, boolean answer) throws NotAuthenticatedException {
 		QuestionModel nextQuestion = null;
 
-		if (this.userExist(user)) {
+		if (this.userExist(irtExaminee)) {
 			markItemAsAnswered();
 			if (!finalizationCriteria()) {
-				this.updateProficiency(user, answer);
+				this.updateProficiency(irtExaminee, answer);
+				List<ItemResponseModel> questions = null;
+
 				if (isCorrect(answer)) {
-					nextQuestion = this.questionDAO.searchNextMoreHard(question.getDifficulty());
+					// nextQuestion = this.questionDAO.searchNextMoreHard(question.getDifficulty());
+					questions = this.questionDAO.searchQuestionsMoreHard(question.getDifficulty());
 
 				} else {
-					nextQuestion = this.questionDAO.searchNextMoreEasy(question.getDifficulty());
+					// nextQuestion = this.questionDAO.searchNextMoreEasy(question.getDifficulty());
+					questions = this.questionDAO.searchQuestionsMoreEasy(question.getDifficulty());
+
 				}
+
+				nextQuestion = this.selectQuestionMostInformative(irtExaminee, questions);
 
 			} else {
 				this.finalizeTest();
@@ -108,7 +121,7 @@ public class CatManager {
 		return nextQuestion;
 	}
 
-	private boolean userExist(UserModel user) {
+	private boolean userExist(IrtExaminee irtExaminee) {
 		return Boolean.TRUE;
 	}
 
@@ -122,7 +135,7 @@ public class CatManager {
 
 	}
 
-	private void updateProficiency(UserModel user, boolean answer) {
+	private void updateProficiency(IrtExaminee irtExaminee, boolean answer) {
 		// TODO Auto-generated method stub
 
 	}
@@ -144,15 +157,55 @@ public class CatManager {
 	/**
 	 * Select the most appropriate question based on user ability.
 	 * 
+	 * @param irtExaminee
+	 * 
 	 * @return the most appropriate question
 	 */
-	private QuestionModel selectFittestItem() {
-		return this.questionDAO.searchTheAverageQuestion();
+	private QuestionModel selectQuestionMostInformative(IrtExaminee irtExaminee, List<ItemResponseModel> irms) {
+		QuestionModel questionModelMoreInformative = null;
+
+		if (!ValidationUtil.isNullOrEmpty(irms)) {
+			ItemResponseModel irmMostInformative = irms.get(0); // get first
+			double iifBigger = irmMostInformative.itemInformationAt(irtExaminee.getTheta());
+
+			for (int i = 1; i < irms.size(); i++) {
+				double iifLocal = irms.get(i).itemInformationAt(irtExaminee.getTheta());
+				if (iifLocal > iifBigger) {
+					iifBigger = iifLocal;
+					irmMostInformative = irms.get(i);
+				}
+			}
+
+			questionModelMoreInformative = this.questionDAO.findByDifficult(irmMostInformative.getDifficulty());
+		}
+
+		return questionModelMoreInformative;
 	}
 
-	private boolean haveEnoughInformation(UserModel user) {
+	private boolean haveEnoughInformation(IrtExaminee irtExaminee) {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
+	//
+	// private void iif(UserModel user, QuestionModel question) {
+	// double iif = P(user.getTheta(), question.getDifficulty()) * Q(user.getTheta(), question.getDifficulty());
+	// }
+	//
+	// private double Q(double theta, double difficulty) {
+	// return 1 - P(theta, difficulty);
+	// }
+	//
+	// private double P(double theta, double difficulty) {
+	// double P_i = (1 / (1 + Math.exp(L(theta, difficulty))));
+	// return P_i;
+	// }
+	//
+	// /**
+	// * @param theta
+	// * @param difficulty
+	// * @return
+	// */
+	// private double L(double theta, double difficulty) {
+	// return theta - difficulty;
+	// }
 }

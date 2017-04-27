@@ -18,6 +18,7 @@
  */
 package managedBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -85,7 +86,10 @@ public class ContextMB {
 		QuestionModel startedQuestion = null;
 
 		try {
-			startedQuestion = catManager.start(this.userLoginMB.getUserModel());
+			ArrayList<ItemResponseModel> irms = new ArrayList<ItemResponseModel>();
+			irms.addAll(DaoFake.getIrms());
+			IrtExaminee irtExaminee = new IrtExaminee(irms);
+			startedQuestion = catManager.start(irtExaminee);
 		} catch (NotAuthenticatedException e) {
 			MessageUtil.addErrorMessage("You have no questions for today.");
 			e.printStackTrace();

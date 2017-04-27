@@ -41,6 +41,7 @@ import data.UserModel;
 public class DaoFake {
 
 	private static List<QuestionModel> questions;
+	private static List<ItemResponseModel> irms;
 	private static UserModel user;
 
 	public static void init() {
@@ -49,11 +50,11 @@ public class DaoFake {
 	}
 
 	public static List<QuestionModel> getEnem2012Questions() {
-		List<ItemResponseModel> questions = jointEstimation();
+		DaoFake.irms = jointEstimation();
 		List<QuestionModel> questionsFormated = new ArrayList<QuestionModel>();
 
 		int i = 0;
-		for (ItemResponseModel itemResponseModel : questions) {
+		for (ItemResponseModel itemResponseModel : irms) {
 			QuestionModel q = new QuestionModel();
 			q.setId((long) i);
 			q.setDescription("Description from question" + " " + (i++));
@@ -112,7 +113,7 @@ public class DaoFake {
 		IrtCalculator irtCalculator = new IrtCalculator();
 
 		irtCalculator.runJointMleRasch("enem2012.txt");
-		ArrayList<ExamineeModel> iVecsModel = irtCalculator.getiVecsModel();
+		ArrayList<ExamineeModel> examineeModels = irtCalculator.getiVecsModel();
 		List<ItemResponseModel> irms = irtCalculator.getIrms();
 
 		return irms;
@@ -205,6 +206,14 @@ public class DaoFake {
 		actualQuestion.setListOptionModel(listOptionModel);
 
 		return actualQuestion;
+	}
+
+	public static List<ItemResponseModel> getIrms() {
+		return irms;
+	}
+
+	public static void setIrms(List<ItemResponseModel> irms) {
+		DaoFake.irms = irms;
 	}
 
 }

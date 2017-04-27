@@ -24,6 +24,9 @@ import java.util.List;
 import util.DaoFake;
 import util.Util;
 import util.ValidationUtil;
+
+import com.itemanalysis.psychometrics.irt.model.ItemResponseModel;
+
 import data.QuestionModel;
 
 public class QuestionDAO {
@@ -86,6 +89,42 @@ public class QuestionDAO {
 	}
 
 	/**
+	 * Search the prox hardest question in relation to difficult passed by param.
+	 * 
+	 * @return the prox hardest question
+	 */
+	public List<ItemResponseModel> searchQuestionsMoreHard(double difficult) {
+
+		List<ItemResponseModel> hardest = new ArrayList<ItemResponseModel>();
+		for (ItemResponseModel question : DaoFake.getIrms()) {
+			if (question.getDifficulty() > difficult) {
+				hardest.add(question);
+			}
+		}
+
+		return hardest;
+
+	}
+
+	/**
+	 * Search the prox hardest question in relation to difficult passed by param.
+	 * 
+	 * @return the prox hardest question
+	 */
+	public List<ItemResponseModel> searchQuestionsMoreEasy(double difficult) {
+
+		List<ItemResponseModel> easiests = new ArrayList<ItemResponseModel>();
+		for (ItemResponseModel question : DaoFake.getIrms()) {
+			if (question.getDifficulty() < difficult) {
+				easiests.add(question);
+			}
+		}
+
+		return easiests;
+
+	}
+
+	/**
 	 * Search the prox easier question in relation to difficult passed by param.
 	 * 
 	 * @return the prox easier question
@@ -129,14 +168,17 @@ public class QuestionDAO {
 		return averageQuestion;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<QuestionModel> researchQuestionBySubject(QuestionModel questionModel) {
+	public QuestionModel findByDifficult(double difficulty) {
+		List<QuestionModel> questions = DaoFake.getQuestions();
+		QuestionModel questionModelFound = null;
 
-		// super.setPropertySQL("researchQuestionBySubject", questionModel.getSubjectModel().getId());
-		//
-		// return super.getCollectionBean("idSubject");
-		return new ArrayList<QuestionModel>();
+		for (QuestionModel questionModel : questions) {
+			if (questionModel.getDifficulty() == difficulty) {
+				questionModelFound = questionModel;
+				break;
+			}
+		}
 
+		return questionModelFound;
 	}
-
 }

@@ -76,13 +76,13 @@ public class IrtCalculator {
 		int nItems = data[0].length;
 		int nPeople = data.length;
 
-		ItemResponseModel[] irm = new ItemResponseModel[nItems];
+		ItemResponseModel[] irms = new ItemResponseModel[nItems];
 		for (int i = 0; i < nItems; i++) {
-			irm[i] = new Irm3PL(0.0, 1.0);
-			irm[i].setName(new VariableName("V" + (i + 1)));
+			irms[i] = new Irm3PL(0.0, 1.0);
+			irms[i].setName(new VariableName("V" + (i + 1)));
 		}
 
-		JointMaximumLikelihoodEstimation jmle = new JointMaximumLikelihoodEstimation(data, irm);
+		JointMaximumLikelihoodEstimation jmle = new JointMaximumLikelihoodEstimation(data, irms);
 		jmle.summarizeData(0.3);
 
 		jmle.itemProx();
