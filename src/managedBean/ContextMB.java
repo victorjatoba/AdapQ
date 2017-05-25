@@ -26,6 +26,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
 import util.Constants;
+import util.DaoFake;
 import util.FacesUtil;
 import util.MessageUtil;
 import util.ValidationUtil;
@@ -66,14 +67,27 @@ public class ContextMB {
 	/**
 	 * Method to clear fields when the class be instantiated.
 	 * 
-	 * @author anchieta
 	 */
 	private void clearFields() {
 
 		// Set the managed bean in session to get anywhere else.
 		FacesUtil.setManagedBeanInSession(Constants.CONTEXT_MB, this);
-
+		this.irms = DaoFake.getIrms();
+		// int i = 1;
+		// for (ItemResponseModel irm : irms) {
+		// System.out.println(" Num: " + i++);
+		// System.out.println("Name: " + irm.getName());
+		// System.out.println(" Dif: " + irm.getDifficulty());
+		// System.out.println("  SE: " + irm.getDifficultyStdError());
+		// System.out.println("" + irm.getItemFitStatistic());
+		// }
+		// int i = 1;
+		this.iVecsModel = DaoFake.getiVecsModel();
+		// for (ExamineeModel irtExaminee : iVecsModel) {
+		// System.out.println("" + i++ + " " + irtExaminee.getTheta() + " " + irtExaminee.getExaminee().getResponseVector());
+		// }
 		this.pageChose = Page.UNKNOWN.getValue();
+
 	}
 
 	public String startTest() {

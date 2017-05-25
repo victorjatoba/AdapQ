@@ -45,6 +45,7 @@ public class CatManager {
 	QuestionDAO questionDAO;
 	UserQuestionDAO userQuestionDAO;
 	UserModel user;
+	List<ItemResponseModel> irms;
 
 	public CatManager(UserModel userModel) {
 		super();
@@ -55,6 +56,7 @@ public class CatManager {
 	private void clearFields() {
 		questionDAO = new QuestionDAO();
 		userQuestionDAO = new UserQuestionDAO(new ArrayList<UserQuestionModel>());
+		irms = DaoFake.getIrms();
 	}
 
 	/**
@@ -102,22 +104,25 @@ public class CatManager {
 		// if (this.userExist(this.userModel)) {
 		this.markItemAsAnswered(question, answer);
 		if (!finalizationCriteria()) {
-			this.updateProficiency(answer);
-			List<ItemResponseModel> questions = null;
+			this.updateProficiency();
+			// List<ItemResponseModel> questions = null;
 
-			if (isCorrect(answer)) {
-				// nextQuestion = this.questionDAO.searchNextMoreHard(question.getDifficulty());
-				questions = this.questionDAO.searchQuestionsMoreHard(question.getDifficulty());
+			// if (isCorrect(answer)) {
+			// // nextQuestion = this.questionDAO.searchNextMoreHard(question.getDifficulty());
+			// questions = this.questionDAO.searchQuestionsMoreHard(question.getDifficulty());
+			//
+			// } else {
+			// // nextQuestion = this.questionDAO.searchNextMoreEasy(question.getDifficulty());
+			// questions = this.questionDAO.searchQuestionsMoreEasy(question.getDifficulty());
+			//
+			// }
+			//
+			// if (questions.size() != 0) {
+			// nextQuestion = this.selectQuestionMostInformative(questions);
+			// }
 
-			} else {
-				// nextQuestion = this.questionDAO.searchNextMoreEasy(question.getDifficulty());
-				questions = this.questionDAO.searchQuestionsMoreEasy(question.getDifficulty());
-
-			}
-
-			if (questions.size() != 0) {
-				nextQuestion = this.selectQuestionMostInformative(questions);
-			}
+			List<ItemResponseModel> questions = irms;
+			nextQuestion = this.selectQuestionMostInformative(questions);
 
 		} else {
 			this.finalizeTest();
@@ -145,7 +150,10 @@ public class CatManager {
 
 	}
 
-	private void updateProficiency(boolean answer) {
+	/**
+	 * Responsible to update the user proficiency by MLE.
+	 */
+	private void updateProficiency() {
 		// TODO fill examinee with questions answered
 		IrtExaminee examinee = this.user.getIrtExaminee();
 		List<UserQuestionModel> userQuestionModels = this.userQuestionDAO.getUserQuestionModels();
@@ -164,6 +172,22 @@ public class CatManager {
 
 		UserQuestionModel userQuestionModel = new UserQuestionModel(this.user, question, answer, new Time(0));
 		this.userQuestionDAO.insert(userQuestionModel);
+
+		this.removeQuestion(question);
+	}
+
+	private void removeQuestion(QuestionModel question) {
+		List<ItemResponseModel> newIrms = new ArrayList<ItemResponseModel>();
+
+		for (ItemResponseModel itemResponseModel : irms) {
+			if (!itemResponseModel.getName().getOriginalVariableName().equals("v" + (question.getId() + 1))) {
+				newIrms.add(itemResponseModel);
+			} else {
+				System.out.println("Removed: " + itemResponseModel.getName().getOriginalVariableName());
+			}
+		}
+
+		irms = newIrms;
 	}
 
 	private boolean isCorrect(boolean answer) {
@@ -198,7 +222,8 @@ public class CatManager {
 				}
 			}
 
-			questionModelMoreInformative = this.questionDAO.findByDifficult(irmMostInformative.getDifficulty());
+			questionModelMoreInformative = this.questionDAO.findByDifficultyAndName(irmMostInformative.getDifficulty(), irmMostInformative.getName()
+					.getOriginalVariableName());
 		}
 
 		return questionModelMoreInformative;

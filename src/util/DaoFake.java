@@ -42,6 +42,7 @@ public class DaoFake {
 
 	private static List<QuestionModel> questions;
 	private static List<ItemResponseModel> irms;
+	private static ArrayList<ExamineeModel> iVecsModel;
 	private static UserModel user;
 	private static ItemResponseModel[] irmsArray;
 
@@ -114,7 +115,7 @@ public class DaoFake {
 		IrtCalculator irtCalculator = new IrtCalculator();
 
 		irtCalculator.runJointMleRasch("enem2012.txt");
-		ArrayList<ExamineeModel> examineeModels = irtCalculator.getiVecsModel();
+		iVecsModel = irtCalculator.getiVecsModel();
 		List<ItemResponseModel> irms = irtCalculator.getIrms();
 		DaoFake.irmsArray = irtCalculator.getIrmsArray();
 
@@ -219,6 +220,14 @@ public class DaoFake {
 
 	public static void setIrms(List<ItemResponseModel> irms) {
 		DaoFake.irms = irms;
+	}
+
+	public static ArrayList<ExamineeModel> getiVecsModel() {
+		return iVecsModel;
+	}
+
+	public static void setiVecsModel(ArrayList<ExamineeModel> iVecsModel) {
+		DaoFake.iVecsModel = iVecsModel;
 	}
 
 }

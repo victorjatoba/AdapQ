@@ -181,4 +181,19 @@ public class QuestionDAO {
 
 		return questionModelFound;
 	}
+
+	public QuestionModel findByDifficultyAndName(double difficultyToBeSearch, String nameToBeSearch) {
+		List<QuestionModel> questions = DaoFake.getQuestions();
+		QuestionModel questionModelFound = null;
+
+		for (QuestionModel questionModel : questions) {
+			String name = "v" + (questionModel.getId() + 1);
+			if (questionModel.getDifficulty() == difficultyToBeSearch && nameToBeSearch.equals(name)) {
+				questionModelFound = questionModel;
+				break;
+			}
+		}
+
+		return questionModelFound;
+	}
 }
